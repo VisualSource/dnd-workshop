@@ -1,17 +1,26 @@
 import { Client, Session } from "@heroiclabs/nakama-js";
 
-class Nakama {
+export class Nakama {
     private client: Client;
 
     private _session: Session | null = null;
 
 
     constructor(){
-        this.client = new Client();
+        this.client = new Client(
+            import.meta.env.VITE_NAKAMA_SERVER_KEY,
+            import.meta.env.VITE_NAKAMA_SERVER_HOST,
+            import.meta.env.VITE_NAKAMA_SERVER_PORT,
+            false
+        );
 
 
         // load session
-        this.restore();
+        //this.restore();
+    }
+
+    isAuthenticated(){
+        return this._session !== null;
     }
 
     get session(){
@@ -49,8 +58,11 @@ class Nakama {
         localStorage.setItem("refresh-token",this._session!.refresh_token);
     }
 
-    async login(email: string, psd: string){
-        this._session = await this.client.authenticateEmail(email,psd)
+    async login(origin: "steam" | "email", args: { email?: string; psd?: string }){
+
+        //this.client.authenticateCustom("steam");
+
+        //this._session = await this.client.authenticateEmail(email,psd)
     }
 
     async logout(){

@@ -9,8 +9,50 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SignupRouteImport } from './routes/signup'
+import { Route as PlayerRouteImport } from './routes/player'
+import { Route as LoginRouteImport } from './routes/login'
+import { Route as JoinSessionRouteImport } from './routes/join-session'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as EditorSessionRouteImport } from './routes/editor-session'
+import { Route as CreateSessionRouteImport } from './routes/create-session'
 import { Route as IndexRouteImport } from './routes/index'
 
+const SignupRoute = SignupRouteImport.update({
+  id: '/signup',
+  path: '/signup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PlayerRoute = PlayerRouteImport.update({
+  id: '/player',
+  path: '/player',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const LoginRoute = LoginRouteImport.update({
+  id: '/login',
+  path: '/login',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const JoinSessionRoute = JoinSessionRouteImport.update({
+  id: '/join-session',
+  path: '/join-session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const EditorSessionRoute = EditorSessionRouteImport.update({
+  id: '/editor-session',
+  path: '/editor-session',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const CreateSessionRoute = CreateSessionRouteImport.update({
+  id: '/create-session',
+  path: '/create-session',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
@@ -19,28 +61,130 @@ const IndexRoute = IndexRouteImport.update({
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/create-session': typeof CreateSessionRoute
+  '/editor-session': typeof EditorSessionRoute
+  '/home': typeof HomeRoute
+  '/join-session': typeof JoinSessionRoute
+  '/login': typeof LoginRoute
+  '/player': typeof PlayerRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/create-session': typeof CreateSessionRoute
+  '/editor-session': typeof EditorSessionRoute
+  '/home': typeof HomeRoute
+  '/join-session': typeof JoinSessionRoute
+  '/login': typeof LoginRoute
+  '/player': typeof PlayerRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/create-session': typeof CreateSessionRoute
+  '/editor-session': typeof EditorSessionRoute
+  '/home': typeof HomeRoute
+  '/join-session': typeof JoinSessionRoute
+  '/login': typeof LoginRoute
+  '/player': typeof PlayerRoute
+  '/signup': typeof SignupRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths:
+    | '/'
+    | '/create-session'
+    | '/editor-session'
+    | '/home'
+    | '/join-session'
+    | '/login'
+    | '/player'
+    | '/signup'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to:
+    | '/'
+    | '/create-session'
+    | '/editor-session'
+    | '/home'
+    | '/join-session'
+    | '/login'
+    | '/player'
+    | '/signup'
+  id:
+    | '__root__'
+    | '/'
+    | '/create-session'
+    | '/editor-session'
+    | '/home'
+    | '/join-session'
+    | '/login'
+    | '/player'
+    | '/signup'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  CreateSessionRoute: typeof CreateSessionRoute
+  EditorSessionRoute: typeof EditorSessionRoute
+  HomeRoute: typeof HomeRoute
+  JoinSessionRoute: typeof JoinSessionRoute
+  LoginRoute: typeof LoginRoute
+  PlayerRoute: typeof PlayerRoute
+  SignupRoute: typeof SignupRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/signup': {
+      id: '/signup'
+      path: '/signup'
+      fullPath: '/signup'
+      preLoaderRoute: typeof SignupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/player': {
+      id: '/player'
+      path: '/player'
+      fullPath: '/player'
+      preLoaderRoute: typeof PlayerRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/login': {
+      id: '/login'
+      path: '/login'
+      fullPath: '/login'
+      preLoaderRoute: typeof LoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/join-session': {
+      id: '/join-session'
+      path: '/join-session'
+      fullPath: '/join-session'
+      preLoaderRoute: typeof JoinSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/editor-session': {
+      id: '/editor-session'
+      path: '/editor-session'
+      fullPath: '/editor-session'
+      preLoaderRoute: typeof EditorSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/create-session': {
+      id: '/create-session'
+      path: '/create-session'
+      fullPath: '/create-session'
+      preLoaderRoute: typeof CreateSessionRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/': {
       id: '/'
       path: '/'
@@ -53,6 +197,13 @@ declare module '@tanstack/react-router' {
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  CreateSessionRoute: CreateSessionRoute,
+  EditorSessionRoute: EditorSessionRoute,
+  HomeRoute: HomeRoute,
+  JoinSessionRoute: JoinSessionRoute,
+  LoginRoute: LoginRoute,
+  PlayerRoute: PlayerRoute,
+  SignupRoute: SignupRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
