@@ -1,72 +1,98 @@
-import { Client, Session } from "@heroiclabs/nakama-js";
+import { Client, Session, type Socket } from "@heroiclabs/nakama-js";
 
-export class Nakama {
-    private client: Client;
+export class Nakama extends EventTarget {
+	static INSTANCE: Nakama | null = null;
+	static get() {
+		if (!Nakama.INSTANCE) {
+			Nakama.INSTANCE = new Nakama();
+		}
 
-    private _session: Session | null = null;
+		return Nakama.INSTANCE;
+	}
 
+	private client: Client;
+	public _loading = false;
+	private _session: Session | null = null;
+	private _socket: Socket | null = null;
 
-    constructor(){
-        this.client = new Client(
-            import.meta.env.VITE_NAKAMA_SERVER_KEY,
-            import.meta.env.VITE_NAKAMA_SERVER_HOST,
-            import.meta.env.VITE_NAKAMA_SERVER_PORT,
-            false
-        );
+	public useSSL = false;
 
+	private constructor() {
+		super();
+		this.client = new Client(
+			import.meta.env.VITE_NAKAMA_SERVER_KEY,
+			import.meta.env.VITE_NAKAMA_SERVER_HOST,
+			import.meta.env.VITE_NAKAMA_SERVER_PORT,
+			this.useSSL,
+		);
+	}
 
-        // load session
-        //this.restore();
-    }
+	async init() {
+		this._socket = this.client.createSocket(this.useSSL);
+		await this._socket.connect(this.session, true);
+	}
 
-    isAuthenticated(){
-        return this._session !== null;
-    }
+	async login(username: string) {
+		let id = localStorage.getItem("deviceId");
+		if (!id) {
+			id = crypto.randomUUID();
+			localStorage.setItem("deviceId", id);
+		}
 
-    get session(){
-        if(!this._session) throw new Error("no session");
-        return this._session;
-    }
+		this._session = await this.client.authenticateDevice(id, true, username);
 
-    async restore(){
+		localStorage.setItem(
+			"auth",
+			JSON.stringify({
+				token: this._session.token,
+				refreshToken: this._session.refresh_token,
+			}),
+		);
+	}
 
-        const token = localStorage.getItem("token");
-        const refreshToken = localStorage.getItem("refresh-token");
+	public isAuthenticated() {
+		return this._session !== null;
+	}
 
-        if(!token || !refreshToken) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh-token");
+	public get session() {
+		if (!this._session) throw new Error("no session");
+		return this._session;
+	}
 
-            return;
-        }
+	public async restore() {
+		const auth = localStorage.getItem("auth");
 
-        const session = new Session(token,refreshToken,false);
+		if (!auth) {
+			return false;
+		}
 
-        if(session.isexpired(Date.now() + 1)) {
-          try {
-            this._session = await this.client.sessionRefresh(session);
-          } catch (error) {
-            localStorage.removeItem("token");
-            localStorage.removeItem("refresh-token");
-            console.error(error);
-          }
-        } else {
-            this._session = session;
-        }
+		const { token, refreshToken } = JSON.parse(auth) as {
+			token: string;
+			refreshToken: string;
+		};
 
-        localStorage.setItem("token",this._session!.token);
-        localStorage.setItem("refresh-token",this._session!.refresh_token);
-    }
+		const session = new Session(token, refreshToken, false);
 
-    async login(origin: "steam" | "email", args: { email?: string; psd?: string }){
+		if (session.isexpired(Date.now() + 1)) {
+			try {
+				this._session = await this.client.sessionRefresh(session);
+				localStorage.setItem(
+					"auth",
+					JSON.stringify({
+						token: this._session.token,
+						refreshToken: this._session.refresh_token,
+					}),
+				);
+			} catch (error) {
+				localStorage.removeItem("token");
+				localStorage.removeItem("refresh-token");
+				console.error(error);
+			}
 
-        //this.client.authenticateCustom("steam");
+			return false;
+		}
 
-        //this._session = await this.client.authenticateEmail(email,psd)
-    }
-
-    async logout(){
-        await this.client.sessionLogout(this.session,this.session.token,this.session.refresh_token);
-    }
-
+		this._session = session;
+		return true;
+	}
 }

@@ -9,7 +9,7 @@ function RouteComponent() {
 	return (
 		<div>
 			<Button>
-				<Link to="/home">Back</Link>
+				<Link to="/">Back</Link>
 			</Button>
 		</div>
 	);

@@ -3,13 +3,9 @@ import { Application } from "@pixi/react";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useRef } from "react";
 
-import { confirm } from "@tauri-apps/plugin-dialog";
-
 export const Route = createFileRoute("/editor-session")({
 	component: RouteComponent,
-	onLeave: async () => {
-		const r = await confirm("You have unsaved changes.");
-	},
+	onLeave: async () => {},
 });
 
 function RouteComponent() {
