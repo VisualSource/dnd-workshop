@@ -92,20 +92,36 @@ export function LoginForm({
 					<Field className="grid gap-4">
 						<Button
 							onClick={() => {
-								const loginURL = new URL("https://steamcommunity.com/openid/login");
-								loginURL.searchParams.set("openid.ns","http://specs.openid.net/auth/2.0");
-								loginURL.searchParams.set("openid.mode","checkid_setup");
-								loginURL.searchParams.set("openid.return_to","workshop://steamLogin");
-								loginURL.searchParams.set("openid.realm","");
-								loginURL.searchParams.set("openid.identity","http://specs.openid.net/auth/2.0/identifier_select"),
-								loginURL.searchParams.set("openid.claimed_id","");
+								console.log("Hello");
+
 								// https://github.com/vikas5914/steam-auth/blob/master/src/SteamAuth.php
-								const webview = new WebviewWindow("steamLogin", {
-									url: loginURL.toString(),
+
+								const query = new URLSearchParams({
+									"openid.ns": "",
+									"openid.mode": "checkid_setup",
+									"openid.return_to": "http://localhost:3000",
+									"openid.realm": "http://localhost:3000",
+									"openid.identity":
+										"http://specs.openid.net/auth/2.0/identifier_select",
+									"openid.claimed_id":
+										"http://specs.openid.net/auth/2.0/identifier_select",
 								});
-								
+
+								const webview = new WebviewWindow("steam-login", {
+									url: `https://steamcommunity.com/openid/login?${query.toString()}`,
+									width: 400,
+									height: 600,
+									title: "Steam Login",
+								});
+								webview.once("tauri://created", (e) => {
+									console.log(e);
+									// webview window successfully created
+								});
+								webview.once("tauri://error", (e) => {
+									console.log(e);
+									// an error happened creating the webview window
+								});
 							}}
-							disabled={isPending}
 							variant="outline"
 							type="button"
 						>

@@ -6,12 +6,7 @@
     "main"
   ],
   "permissions": [
-    "core:window:allow-create",
-    "core:window:allow-center",
-    "core:window:allow-close",
-    "core:window:allow-show",
-    "core:webview:allow-create-webview",
-    "core:window:allow-request-user-attention",
+    "core:webview:allow-create-webview-window",
     "core:default",
     "opener:default",
     "dialog:default"
