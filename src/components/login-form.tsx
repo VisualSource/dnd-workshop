@@ -91,27 +91,19 @@ export function LoginForm({
 					<FieldSeparator>Or</FieldSeparator>
 					<Field className="grid gap-4">
 						<Button
-							className="cursor-pointer"
 							onClick={() => {
+								const loginURL = new URL("https://steamcommunity.com/openid/login");
+								loginURL.searchParams.set("openid.ns","http://specs.openid.net/auth/2.0");
+								loginURL.searchParams.set("openid.mode","checkid_setup");
+								loginURL.searchParams.set("openid.return_to","workshop://steamLogin");
+								loginURL.searchParams.set("openid.realm","");
+								loginURL.searchParams.set("openid.identity","http://specs.openid.net/auth/2.0/identifier_select"),
+								loginURL.searchParams.set("openid.claimed_id","");
+								// https://github.com/vikas5914/steam-auth/blob/master/src/SteamAuth.php
 								const webview = new WebviewWindow("steamLogin", {
-									url: "https://steamcommunity.com/openid/login",
+									url: loginURL.toString(),
 								});
-								webview.once("tauri://created", function (e) {
-									console.log(e);
-								});
-								webview.once("tauri://error", function (e) {
-									console.log(e);
-								});
-
-								/*const win = new WebviewWindow("streamLogin", {
-									url: "https://steamcommunity.com/openid/login",
-									width: 800,
-									x: 0,
-									y: 0,
-									height: 600,
-									focus: true,
-								});
-								win.show();*/
+								
 							}}
 							disabled={isPending}
 							variant="outline"
