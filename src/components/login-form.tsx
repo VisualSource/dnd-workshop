@@ -88,7 +88,19 @@ export function LoginForm({
 						</Button>
 					</Field>
 					{errors?.form ? <FieldError>{errors.form}</FieldError> : null}
-					<FieldSeparator>Or</FieldSeparator>
+				</FieldGroup>
+			</form>
+			<FieldDescription className="px-6 text-center">
+				By clicking continue, you agree to our <span>Terms of Service</span> and{" "}
+				<span>Privacy Policy</span>.
+			</FieldDescription>
+		</div>
+	);
+}
+
+/*
+Stream support
+<FieldSeparator>Or</FieldSeparator>
 					<Field className="grid gap-4">
 						<Button
 							onClick={() => {
@@ -135,12 +147,5 @@ export function LoginForm({
 							Continue with Steam
 						</Button>
 					</Field>
-				</FieldGroup>
-			</form>
-			<FieldDescription className="px-6 text-center">
-				By clicking continue, you agree to our <span>Terms of Service</span> and{" "}
-				<span>Privacy Policy</span>.
-			</FieldDescription>
-		</div>
-	);
-}
+
+*/

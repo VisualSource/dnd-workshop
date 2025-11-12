@@ -179,6 +179,11 @@
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
 }
 
+.dm-sidebar-content {
+  @apply grid grid-cols-1;
+  grid-template-rows: calc(var(--spacing) * 14) calc(100cqh - calc(var(--spacing) * 14));
+} 
+
 @layer base {
   * {
     @apply border-border outline-ring/50;

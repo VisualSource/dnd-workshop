@@ -1,4 +1,4 @@
-import { Client, Session, type Socket } from "@heroiclabs/nakama-js";
+import { Client, Match, Session, type Socket } from "@heroiclabs/nakama-js";
 
 export class Nakama extends EventTarget {
 	static INSTANCE: Nakama | null = null;
@@ -14,6 +14,8 @@ export class Nakama extends EventTarget {
 	public _loading = false;
 	private _session: Session | null = null;
 	private _socket: Socket | null = null;
+
+	public match: Match | null = null;
 
 	public useSSL = false;
 
@@ -57,6 +59,12 @@ export class Nakama extends EventTarget {
 	public get session() {
 		if (!this._session) throw new Error("no session");
 		return this._session;
+	}
+
+	public get socket() {
+		if (!this._socket) throw new Error("No socket");
+
+		return this._socket;
 	}
 
 	public async restore() {

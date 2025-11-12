@@ -1,8 +1,15 @@
 import { Application } from "@pixi/react";
-import { createFileRoute } from "@tanstack/react-router";
+import { createFileRoute, redirect } from "@tanstack/react-router";
 import { useRef } from "react";
 
-export const Route = createFileRoute("/player")({
+export const Route = createFileRoute("/player-session/$match-id")({
+	beforeLoad({ context }) {
+		if (!context.nakama.isAuthenticated()) {
+			throw redirect({
+				to: "/login",
+			})
+		}
+	},
 	component: RouteComponent,
 });
 

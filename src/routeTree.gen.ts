@@ -9,18 +9,13 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as PlayerRouteImport } from './routes/player'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JoinSessionRouteImport } from './routes/join-session'
 import { Route as EditorSessionRouteImport } from './routes/editor-session'
-import { Route as CreateSessionRouteImport } from './routes/create-session'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as PlayerSessionMatchIdRouteImport } from './routes/player-session.$match-id'
+import { Route as DmSessionMatchIdRouteImport } from './routes/dm-session.$match-id'
 
-const PlayerRoute = PlayerRouteImport.update({
-  id: '/player',
-  path: '/player',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -36,87 +31,85 @@ const EditorSessionRoute = EditorSessionRouteImport.update({
   path: '/editor-session',
   getParentRoute: () => rootRouteImport,
 } as any)
-const CreateSessionRoute = CreateSessionRouteImport.update({
-  id: '/create-session',
-  path: '/create-session',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const PlayerSessionMatchIdRoute = PlayerSessionMatchIdRouteImport.update({
+  id: '/player-session/$match-id',
+  path: '/player-session/$match-id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const DmSessionMatchIdRoute = DmSessionMatchIdRouteImport.update({
+  id: '/dm-session/$match-id',
+  path: '/dm-session/$match-id',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
-  '/create-session': typeof CreateSessionRoute
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
-  '/player': typeof PlayerRoute
+  '/dm-session/$match-id': typeof DmSessionMatchIdRoute
+  '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
-  '/create-session': typeof CreateSessionRoute
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
-  '/player': typeof PlayerRoute
+  '/dm-session/$match-id': typeof DmSessionMatchIdRoute
+  '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
-  '/create-session': typeof CreateSessionRoute
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
-  '/player': typeof PlayerRoute
+  '/dm-session/$match-id': typeof DmSessionMatchIdRoute
+  '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
-    | '/create-session'
     | '/editor-session'
     | '/join-session'
     | '/login'
-    | '/player'
+    | '/dm-session/$match-id'
+    | '/player-session/$match-id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
-    | '/create-session'
     | '/editor-session'
     | '/join-session'
     | '/login'
-    | '/player'
+    | '/dm-session/$match-id'
+    | '/player-session/$match-id'
   id:
     | '__root__'
     | '/'
-    | '/create-session'
     | '/editor-session'
     | '/join-session'
     | '/login'
-    | '/player'
+    | '/dm-session/$match-id'
+    | '/player-session/$match-id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
-  CreateSessionRoute: typeof CreateSessionRoute
   EditorSessionRoute: typeof EditorSessionRoute
   JoinSessionRoute: typeof JoinSessionRoute
   LoginRoute: typeof LoginRoute
-  PlayerRoute: typeof PlayerRoute
+  DmSessionMatchIdRoute: typeof DmSessionMatchIdRoute
+  PlayerSessionMatchIdRoute: typeof PlayerSessionMatchIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/player': {
-      id: '/player'
-      path: '/player'
-      fullPath: '/player'
-      preLoaderRoute: typeof PlayerRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -138,13 +131,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof EditorSessionRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/create-session': {
-      id: '/create-session'
-      path: '/create-session'
-      fullPath: '/create-session'
-      preLoaderRoute: typeof CreateSessionRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/': {
       id: '/'
       path: '/'
@@ -152,16 +138,30 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/player-session/$match-id': {
+      id: '/player-session/$match-id'
+      path: '/player-session/$match-id'
+      fullPath: '/player-session/$match-id'
+      preLoaderRoute: typeof PlayerSessionMatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/dm-session/$match-id': {
+      id: '/dm-session/$match-id'
+      path: '/dm-session/$match-id'
+      fullPath: '/dm-session/$match-id'
+      preLoaderRoute: typeof DmSessionMatchIdRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
-  CreateSessionRoute: CreateSessionRoute,
   EditorSessionRoute: EditorSessionRoute,
   JoinSessionRoute: JoinSessionRoute,
   LoginRoute: LoginRoute,
-  PlayerRoute: PlayerRoute,
+  DmSessionMatchIdRoute: DmSessionMatchIdRoute,
+  PlayerSessionMatchIdRoute: PlayerSessionMatchIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

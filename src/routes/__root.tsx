@@ -1,10 +1,5 @@
-import { Spinner } from "@/components/ui/spinner";
 import type { Nakama } from "@/lib/nakama";
-import {
-	createRootRouteWithContext,
-	Outlet,
-	redirect,
-} from "@tanstack/react-router";
+import { createRootRouteWithContext, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/react-router-devtools";
 
 interface RouterContext {

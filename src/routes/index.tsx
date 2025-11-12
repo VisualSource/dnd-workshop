@@ -1,6 +1,13 @@
 import { Button } from "@/components/ui/button";
 import { Spinner } from "@/components/ui/spinner";
-import { createFileRoute, Link, redirect } from "@tanstack/react-router";
+import { Nakama } from "@/lib/nakama";
+import {
+	createFileRoute,
+	Link,
+	redirect,
+	useNavigate,
+} from "@tanstack/react-router";
+import { useTransition } from "react";
 
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
@@ -33,10 +40,28 @@ function PendingComponent() {
 }
 
 function RouteComponent() {
+	const navigate = useNavigate();
+	const [isPending, transition] = useTransition();
+
 	return (
 		<div>
-			<Button asChild>
-				<Link to="/create-session">Create Session</Link>
+			<Button
+				disabled={isPending}
+				onClick={() => {
+					transition(async () => {
+						const nakama = Nakama.get();
+						const match = await nakama.socket.createMatch(crypto.randomUUID());
+						nakama.match = match;
+						await navigate({
+							to: "/dm-session/$match-id",
+							params: {
+								"match-id": match.match_id,
+							},
+						});
+					});
+				}}
+			>
+				Start Session
 			</Button>
 			<Button asChild>
 				<Link to="/join-session">Join Session</Link>
