@@ -9,6 +9,7 @@
     "core:webview:allow-create-webview-window",
     "core:default",
     "opener:default",
-    "dialog:default"
+    "dialog:default",
+    "fs:default"
   ]
 }
