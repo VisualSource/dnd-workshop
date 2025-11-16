@@ -11,6 +11,9 @@ importers:
       '@heroiclabs/nakama-js':
         specifier: ^2.8.0
         version: 2.8.0
+      '@pixi/devtools':
+        specifier: ^2.0.1
+        version: 2.0.1(pixi.js@8.14.0)
       '@pixi/layout':
         specifier: ^3.2.0
         version: 3.2.0(@types/react@19.2.2)(pixi.js@8.14.0)(react@19.2.0)(yoga-layout@3.2.1)
@@ -509,6 +512,11 @@ packages:
 
   '@pixi/colord@2.9.6':
     resolution: {integrity: sha512-nezytU2pw587fQstUu1AsJZDVEynjskwOL+kibwcdxsMBFqPsFFNA7xl0ii/gXuDi6M0xj3mfRJj8pBSc2jCfA==}
+
+  '@pixi/devtools@2.0.1':
+    resolution: {integrity: sha512-TFCqNkJoLNYHDELgQ3bKWvA33twWpoUhQB8Y+hneBdDBunRsqZ5ZzwH7+6E5eVaVn7eeLAXHs9QGRGsxM0fRlw==}
+    peerDependencies:
+      pixi.js: ^7 || ^8
 
   '@pixi/layout@3.2.0':
     resolution: {integrity: sha512-7TtDLHfaF65sTnYjrvRNqNJSQHMH109b04RtNgoy//BjR+pKWFUCgDMnUhs13fdNM0AkGccQW3UqCdylHuGvbA==}
@@ -2275,6 +2283,10 @@ snapshots:
       '@jridgewell/sourcemap-codec': 1.5.5
 
   '@pixi/colord@2.9.6': {}
+
+  '@pixi/devtools@2.0.1(pixi.js@8.14.0)':
+    dependencies:
+      pixi.js: 8.14.0
 
   '@pixi/layout@3.2.0(@types/react@19.2.2)(pixi.js@8.14.0)(react@19.2.0)(yoga-layout@3.2.1)':
     dependencies:

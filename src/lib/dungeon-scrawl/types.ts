@@ -26,7 +26,7 @@ export type DSFile = {
 		geometry: Record<
 			UUID,
 			{
-				polygons: number[][];
+				polygons: [number, number][][][];
 				polylines: number[];
 			}
 		>;

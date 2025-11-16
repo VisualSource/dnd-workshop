@@ -4,8 +4,10 @@ import {
 	CullerPlugin,
 	extensions,
 	Graphics,
-	Text,
 } from "pixi.js";
+import {} from "@pixi/devtools";
+import { parseMapFile } from "./dungeon-scrawl/parser";
+import { readFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 
 function buildGrid(graphics: Graphics) {
 	// Draw 10 vertical lines spaced 10 pixels apart
@@ -53,48 +55,25 @@ export class Engine {
 		this.app.queueResize();
 		if (signal?.aborted) return;
 
-		const gridPixel = buildGrid(new Graphics()).stroke({
-			color: 0xffffff,
-			pixelLine: true,
-			width: 1,
-		});
-
-		const grid = buildGrid(new Graphics()).stroke({
-			color: 0xffffff,
-			pixelLine: false,
-		});
-
-		// Position the grids side by side
-		grid.x = -100;
-		grid.y = -50;
-		gridPixel.y = -50;
+		if (import.meta.env.DEV) {
+		}
 
 		// Create a container to hold both grids
 		const container = new Container();
-
-		container.addChild(grid, gridPixel);
+		container.label = "root";
 
 		// Center the container on screen
 		container.x = this.app.screen.width / 2;
 		container.y = this.app.screen.height / 2;
 		this.app.stage.addChild(container);
 
-		// Animation variables
-		let count = 0;
-		this.app.ticker.add(() => {
-			count += 0.01;
-			container.scale = 1 + (Math.sin(count) + 1) * 2;
+		const file = await readFile("dungeon.ds", {
+			baseDir: BaseDirectory.Download,
 		});
 
-		const label = new Text({
-			text: "Grid Comparison: Standard Lines (Left) vs Pixel-Perfect Lines (Right)",
-			style: { fill: 0xffffff },
-		});
+		const map = parseMapFile(file);
 
-		label.position.set(20, 20);
-		label.width = this.app.screen.width - 40;
-		label.scale.y = label.scale.x;
-		this.app.stage.addChild(label);
+		container.addChild(map);
 	}
 
 	public mount(canvas: HTMLCanvasElement | null) {

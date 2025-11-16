@@ -1,15 +1,21 @@
 {
-  "$schema": "../gen/schemas/desktop-schema.json",
-  "identifier": "default",
-  "description": "Capability for the main window",
-  "windows": [
-    "main"
-  ],
-  "permissions": [
-    "core:webview:allow-create-webview-window",
-    "core:default",
-    "opener:default",
-    "dialog:default",
-    "fs:default"
-  ]
+	"$schema": "../gen/schemas/desktop-schema.json",
+	"identifier": "default",
+	"description": "Capability for the main window",
+	"windows": ["main"],
+	"permissions": [
+		"core:webview:allow-create-webview-window",
+		"core:default",
+		{
+			"identifier": "fs:allow-read-file",
+			"allow": [
+				{ "path": "$DOWNLOAD/*" },
+				{ "path": "$DOCUMENT/*" },
+				{ "path": "$APPDATA/*" }
+			]
+		},
+		"opener:default",
+		"dialog:default",
+		"fs:default"
+	]
 }
