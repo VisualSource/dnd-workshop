@@ -1,11 +1,5 @@
-import {
-	Application,
-	Container,
-	CullerPlugin,
-	extensions,
-	Graphics,
-} from "pixi.js";
-import {} from "@pixi/devtools";
+import { Application, CullerPlugin, extensions, type Graphics } from "pixi.js";
+import { Viewport } from "pixi-viewport";
 import { parseMapFile } from "./dungeon-scrawl/parser";
 import { readFile, BaseDirectory } from "@tauri-apps/plugin-fs";
 
@@ -55,25 +49,23 @@ export class Engine {
 		this.app.queueResize();
 		if (signal?.aborted) return;
 
-		if (import.meta.env.DEV) {
-		}
+		const viewport = new Viewport({
+			screenWidth: this.canvas.width,
+			screenHeight: this.canvas.height,
+			worldHeight: 10_000,
+			worldWidth: 10_000,
+			events: this.app.renderer.events,
+		});
+		this.app.stage.addChild(viewport);
+		viewport.drag().pinch().wheel();
 
-		// Create a container to hold both grids
-		const container = new Container();
-		container.label = "root";
-
-		// Center the container on screen
-		container.x = this.app.screen.width / 2;
-		container.y = this.app.screen.height / 2;
-		this.app.stage.addChild(container);
-
-		const file = await readFile("dungeon.ds", {
+		const file = await readFile("dungeon(1).ds", {
 			baseDir: BaseDirectory.Download,
 		});
 
-		const map = parseMapFile(file);
-
-		container.addChild(map);
+		const { map, bgColor } = parseMapFile(file);
+		this.app.renderer.background.color.setValue(bgColor);
+		viewport.addChild(map);
 	}
 
 	public mount(canvas: HTMLCanvasElement | null) {

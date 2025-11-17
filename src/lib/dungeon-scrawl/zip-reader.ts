@@ -191,8 +191,6 @@ export const readZip = (file: Uint8Array<ArrayBuffer>) => {
 	if (eocdByteOffset <= 0) throw new Error("Failed to find EOCD header");
 
 	const eocdHeader = eocd(file.slice(eocdByteOffset));
-	console.log(eocdHeader);
-
 	const centralDirHeaderBytes = file.slice(
 		eocdHeader.offsetOfStartCtrlDirRelStart,
 		eocdHeader.offsetOfStartCtrlDirRelStart + eocdHeader.sizeOfCentralDirBytes,

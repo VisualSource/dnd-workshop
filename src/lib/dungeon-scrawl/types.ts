@@ -62,7 +62,7 @@ type DSNodePage = {
 	grid: {
 		type: "square";
 		cellDiameter: number;
-		variant: "lines";
+		variant: "lines" | "dots";
 		visible: boolean;
 		dotsOptions: {
 			radius: number;
@@ -146,7 +146,7 @@ type DSNodeGrid = {
 	parentId: UUID;
 	visible: boolean;
 	gridType: "square";
-	variant: "clean";
+	variant: "clean" | "rought" | "dots";
 	cleanOptions: {
 		width: number;
 		colour: Color;

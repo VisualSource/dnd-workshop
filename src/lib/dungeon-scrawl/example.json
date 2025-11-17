@@ -17,10 +17,10 @@
 					"parentId": "document",
 					"name": "",
 					"children": [
-						"85f1b32f-29e7-42eb-bc68-1c7a02b675dc",
+						"398a2dd2-17c9-4c73-98f5-5b961957e169",
 						"35886178-c403-4ced-858b-5a135bf51d2d"
 					],
-					"selection": ["85f1b32f-29e7-42eb-bc68-1c7a02b675dc"],
+					"selection": ["398a2dd2-17c9-4c73-98f5-5b961957e169"],
 					"alpha": 1,
 					"objectSelection": [],
 					"pageTransform": "default",
@@ -28,13 +28,13 @@
 					"grid": {
 						"type": "square",
 						"cellDiameter": 36,
-						"variant": "lines",
+						"variant": "dots",
 						"visible": true,
 						"dotsOptions": { "radius": 1.5 },
 						"linesOptions": { "width": 1 },
-						"sharedOptions": { "colour": { "colour": 3355443, "alpha": 1 } }
+						"sharedOptions": { "colour": { "colour": 11127773, "alpha": 1 } }
 					},
-					"background": { "colour": { "colour": 1513239, "alpha": 1 } },
+					"background": { "colour": { "colour": 5673914, "alpha": 1 } },
 					"lighting": {
 						"enabled": false,
 						"ambientLight": { "colour": 3359846, "alpha": 1 },
@@ -51,61 +51,61 @@
 					"visible": true,
 					"children": []
 				},
-				"85f1b32f-29e7-42eb-bc68-1c7a02b675dc": {
+				"398a2dd2-17c9-4c73-98f5-5b961957e169": {
 					"type": "TEMPLATE",
-					"id": "85f1b32f-29e7-42eb-bc68-1c7a02b675dc",
+					"id": "398a2dd2-17c9-4c73-98f5-5b961957e169",
 					"alpha": 1,
 					"parentId": "a6170932-b8f6-4e4d-9eab-3240d79c337c",
 					"name": "Old School Module 1",
 					"visible": true,
-					"children": ["da79ff2f-e860-4b94-ba7d-a58cced4b3d0"],
+					"children": ["76d524f1-5f61-4097-9595-f1cc19807839"],
 					"template": {
 						"type": "CLASSIC",
-						"dungeonShape": "da79ff2f-e860-4b94-ba7d-a58cced4b3d0",
-						"floor": "2dffaf66-ac7c-4434-ac3f-dc9e593d47c2",
-						"grid": "9a6b7b01-36d1-448c-b397-f3e500aefc91",
-						"walls": "97c23cd9-19a9-41ee-a792-8caa630e876a"
+						"dungeonShape": "76d524f1-5f61-4097-9595-f1cc19807839",
+						"floor": "5066d82e-ebd7-4cb6-a60b-d57497725488",
+						"grid": "0f2f3806-cc49-4f3b-96d7-bcadd02ac0d0",
+						"walls": "66a3c46c-9c2f-4d20-a9e7-8dd0cb364c0c"
 					}
 				},
-				"da79ff2f-e860-4b94-ba7d-a58cced4b3d0": {
+				"76d524f1-5f61-4097-9595-f1cc19807839": {
 					"type": "GEOMETRY",
-					"id": "da79ff2f-e860-4b94-ba7d-a58cced4b3d0",
+					"id": "76d524f1-5f61-4097-9595-f1cc19807839",
 					"alpha": 1,
-					"parentId": "85f1b32f-29e7-42eb-bc68-1c7a02b675dc",
+					"parentId": "398a2dd2-17c9-4c73-98f5-5b961957e169",
 					"name": "Old School Module 1",
 					"visible": true,
 					"children": [
-						"2dffaf66-ac7c-4434-ac3f-dc9e593d47c2",
-						"daa69f18-4d1c-4c3e-a97d-8d1ef5e448bf",
-						"97c23cd9-19a9-41ee-a792-8caa630e876a"
+						"5066d82e-ebd7-4cb6-a60b-d57497725488",
+						"42132025-9211-4800-92b8-922e26e73af1",
+						"66a3c46c-9c2f-4d20-a9e7-8dd0cb364c0c"
 					],
 					"backgroundEffect": {},
 					"geometryId": "72f364dc-86ba-4923-97fc-c42f34376b00"
 				},
-				"daa69f18-4d1c-4c3e-a97d-8d1ef5e448bf": {
+				"42132025-9211-4800-92b8-922e26e73af1": {
 					"type": "FOLDER",
-					"id": "daa69f18-4d1c-4c3e-a97d-8d1ef5e448bf",
+					"id": "42132025-9211-4800-92b8-922e26e73af1",
 					"alpha": 1,
-					"parentId": "da79ff2f-e860-4b94-ba7d-a58cced4b3d0",
+					"parentId": "76d524f1-5f61-4097-9595-f1cc19807839",
 					"name": "Grid",
 					"visible": true,
 					"children": [
-						"09159eda-0724-4423-9d62-52708ae91e57",
-						"9a6b7b01-36d1-448c-b397-f3e500aefc91"
+						"88b877af-4cee-4d7c-955b-208eba258102",
+						"0f2f3806-cc49-4f3b-96d7-bcadd02ac0d0"
 					]
 				},
-				"9a6b7b01-36d1-448c-b397-f3e500aefc91": {
+				"0f2f3806-cc49-4f3b-96d7-bcadd02ac0d0": {
 					"type": "GRID",
-					"id": "9a6b7b01-36d1-448c-b397-f3e500aefc91",
+					"id": "0f2f3806-cc49-4f3b-96d7-bcadd02ac0d0",
 					"alpha": 1,
 					"name": "Grid",
-					"parentId": "daa69f18-4d1c-4c3e-a97d-8d1ef5e448bf",
+					"parentId": "42132025-9211-4800-92b8-922e26e73af1",
 					"visible": true,
 					"gridType": "square",
 					"variant": "clean",
 					"cleanOptions": {
 						"width": 1,
-						"colour": { "colour": 12895428, "alpha": 1 }
+						"colour": { "colour": 11127773, "alpha": 1 }
 					},
 					"roughOptions": {
 						"width": 1,
@@ -130,12 +130,12 @@
 						"colour": { "colour": 5592405, "alpha": 1 }
 					}
 				},
-				"09159eda-0724-4423-9d62-52708ae91e57": {
+				"88b877af-4cee-4d7c-955b-208eba258102": {
 					"type": "MULTIPOLYGON",
-					"id": "09159eda-0724-4423-9d62-52708ae91e57",
+					"id": "88b877af-4cee-4d7c-955b-208eba258102",
 					"alpha": 1,
 					"name": "Mask",
-					"parentId": "daa69f18-4d1c-4c3e-a97d-8d1ef5e448bf",
+					"parentId": "42132025-9211-4800-92b8-922e26e73af1",
 					"mask": true,
 					"visible": true,
 					"blendMode": "normal",
@@ -150,12 +150,12 @@
 						"colour": { "colour": 16777215, "alpha": 1 }
 					}
 				},
-				"2dffaf66-ac7c-4434-ac3f-dc9e593d47c2": {
+				"5066d82e-ebd7-4cb6-a60b-d57497725488": {
 					"type": "MULTIPOLYGON",
-					"id": "2dffaf66-ac7c-4434-ac3f-dc9e593d47c2",
+					"id": "5066d82e-ebd7-4cb6-a60b-d57497725488",
 					"alpha": 1,
 					"name": "Floor",
-					"parentId": "da79ff2f-e860-4b94-ba7d-a58cced4b3d0",
+					"parentId": "76d524f1-5f61-4097-9595-f1cc19807839",
 					"mask": false,
 					"visible": true,
 					"blendMode": "normal",
@@ -170,19 +170,19 @@
 						"colour": { "colour": 16777215, "alpha": 1 }
 					}
 				},
-				"97c23cd9-19a9-41ee-a792-8caa630e876a": {
+				"66a3c46c-9c2f-4d20-a9e7-8dd0cb364c0c": {
 					"type": "MULTIPOLYGON",
-					"id": "97c23cd9-19a9-41ee-a792-8caa630e876a",
+					"id": "66a3c46c-9c2f-4d20-a9e7-8dd0cb364c0c",
 					"alpha": 1,
 					"name": "Walls",
-					"parentId": "da79ff2f-e860-4b94-ba7d-a58cced4b3d0",
+					"parentId": "76d524f1-5f61-4097-9595-f1cc19807839",
 					"mask": false,
 					"visible": true,
 					"blendMode": "normal",
 					"stroke": {
 						"visible": true,
 						"width": 3,
-						"colour": { "colour": 1513239, "alpha": 1 },
+						"colour": { "colour": 5673914, "alpha": 1 },
 						"roughOptions": "off"
 					},
 					"fill": {
