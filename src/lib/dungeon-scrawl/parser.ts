@@ -205,8 +205,12 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const parent = state.openGroupsStack.at(-1);
 				if (!parent) throw new Error("Failed to get parent");
 
-				if (!node.mask) {
-					parent.container.addChild(graphics);
+			
+				parent.container.addChild(graphics);
+				if(node.mask) {
+					parent.container.setMask({
+						mask: graphics,
+					});
 				}
 
 				const geomerty = map.data.geometry[geomertyId];
@@ -228,13 +232,6 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 							if (node.stroke.visible) graphics.stroke();
 						}
 					}
-				}
-
-				if (node.mask) {
-					parent.container.setMask({
-						inverse: true,
-						mask: graphics,
-					});
 				}
 
 				break;
