@@ -102,12 +102,28 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 					label: "Background",
 				});
 
-				for (let x = 0; x < 10_000; x += node.grid.cellDiameter) {
-					for (let y = 0; y < 10_000; y += node.grid.cellDiameter) {
-						graphics.circle(x, y, node.grid.dotsOptions.radius).fill({
-							color: node.grid.sharedOptions.colour.colour,
-							alpha: node.grid.sharedOptions.colour.alpha,
-						});
+				if (node.grid.variant === "dots") {
+					graphics.setFillStyle({
+						color: node.grid.sharedOptions.colour.colour,
+						alpha: node.grid.sharedOptions.colour.alpha,
+					});
+					for (let x = 0; x < 10_000; x += node.grid.cellDiameter) {
+						for (let y = 0; y < 10_000; y += node.grid.cellDiameter) {
+							graphics.circle(x, y, node.grid.dotsOptions.radius).fill();
+						}
+					}
+				} else if (node.grid.variant === "lines") {
+					graphics.setStrokeStyle({
+						color: node.grid.sharedOptions.colour.colour,
+						alpha: node.grid.sharedOptions.colour.alpha,
+						width: node.grid.linesOptions.width,
+					});
+					for (let x = 0; x < 2000; x += node.grid.cellDiameter) {
+						graphics.moveTo(x, 0).lineTo(x, 2000).stroke();
+					}
+
+					for (let y = 0; y < 2000; y += node.grid.cellDiameter) {
+						graphics.moveTo(0, y).lineTo(2000, y).stroke();
 					}
 				}
 
@@ -175,9 +191,16 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 					color: node.cleanOptions.colour.colour,
 					alpha: node.cleanOptions.colour.alpha,
 					width: node.cleanOptions.width,
-					pixelLine: true,
 				});
 				graphics.setFillStyle({});
+
+				for (let x = 0; x < 2000; x += 36) {
+					graphics.moveTo(x, 0).lineTo(x, 2000).stroke();
+				}
+
+				for (let y = 0; y < 2000; y += 36) {
+					graphics.moveTo(0, y).lineTo(2000, y).stroke();
+				}
 
 				break;
 			}
@@ -195,7 +218,6 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 					width: node.stroke.width,
 					color: node.stroke.colour.colour,
 					alpha: node.stroke.colour.alpha,
-					pixelLine: true,
 				});
 				graphics.setFillStyle({
 					color: node.fill.colour.colour,
@@ -205,9 +227,8 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const parent = state.openGroupsStack.at(-1);
 				if (!parent) throw new Error("Failed to get parent");
 
-			
 				parent.container.addChild(graphics);
-				if(node.mask) {
+				if (node.mask) {
 					parent.container.setMask({
 						mask: graphics,
 					});
@@ -228,7 +249,7 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 								}
 							}
 
-							if (node.fill.visible) graphics.fill();
+							if (node.fill.visible || node.mask) graphics.fill();
 							if (node.stroke.visible) graphics.stroke();
 						}
 					}
