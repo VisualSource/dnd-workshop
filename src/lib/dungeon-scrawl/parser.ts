@@ -256,6 +256,10 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				break;
 			}
 			case "ASSET_GROUP":
+				break;
+			case "SHADOW": {
+				break;
+			}
 		}
 
 		state.popOpenGroup(node.id);
