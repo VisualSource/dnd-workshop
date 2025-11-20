@@ -12,14 +12,8 @@ export const ApplicationWindow: React.FC<{ className?: string }> = ({
 	}
 
 	useEffect(() => {
-		const resizer = new ResizeObserver(() =>
-			engine.current?.app?.queueResize(),
-		);
-
-		if (container.current) resizer.observe(container.current);
-		engine.current?.mount(canvas.current);
+		engine.current?.mount(canvas.current, container.current);
 		return () => {
-			resizer.disconnect();
 			engine.current?.unmount();
 		};
 	}, []);
