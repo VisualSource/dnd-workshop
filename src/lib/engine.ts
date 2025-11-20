@@ -1,34 +1,13 @@
-import { Application, CullerPlugin, extensions, type Graphics } from "pixi.js";
+import { Application, CullerPlugin, extensions } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { parseMapFile } from "./dungeon-scrawl/parser";
 import { readFile, BaseDirectory } from "@tauri-apps/plugin-fs";
-
-function buildGrid(graphics: Graphics) {
-	// Draw 10 vertical lines spaced 10 pixels apart
-	for (let i = 0; i < 11; i++) {
-		// Move to top of each line (x = i*10, y = 0)
-		graphics
-			.moveTo(i * 10, 0)
-			// Draw down to bottom (x = i*10, y = 100)
-			.lineTo(i * 10, 100);
-	}
-
-	// Draw 10 horizontal lines spaced 10 pixels apart
-	for (let i = 0; i < 11; i++) {
-		// Move to start of each line (x = 0, y = i*10)
-		graphics
-			.moveTo(0, i * 10)
-			// Draw across to end (x = 100, y = i*10)
-			.lineTo(100, i * 10);
-	}
-
-	return graphics;
-}
 
 export class Engine {
 	#mountCount = 0;
 	#fakeDismount = false;
 	canvas: HTMLCanvasElement | null = null;
+	container: HTMLDivElement | null = null;
 	public app: Application | null = null;
 	private controller: AbortController | null = null;
 
@@ -37,13 +16,16 @@ export class Engine {
 	}
 
 	private async init() {
+		this.app = new Application();
+
 		const signal = this.controller?.signal;
-		if (!this.app) throw new Error("App not created");
-		if (!this.canvas) throw new Error("Invalid canvas");
+		if (!this.canvas || !this.container) throw new Error("Invalid canvas");
 
 		await this.app.init({
 			canvas: this.canvas,
 			antialias: true,
+			autoDensity: true,
+			resizeTo: this.container,
 		});
 
 		this.app.queueResize();
@@ -59,7 +41,7 @@ export class Engine {
 		this.app.stage.addChild(viewport);
 		viewport.drag().pinch().wheel();
 
-		const file = await readFile("dungeon.ds", {
+		const file = await readFile("dungeon(3).ds", {
 			baseDir: BaseDirectory.Download,
 		});
 
@@ -68,19 +50,36 @@ export class Engine {
 		viewport.addChild(map);
 	}
 
-	public mount(canvas: HTMLCanvasElement | null) {
+	public mount(
+		canvas: HTMLCanvasElement | null,
+		container: HTMLDivElement | null,
+	) {
 		this.#mountCount++;
 		if (this.#mountCount !== 1) return;
-		if (!canvas) return;
+		if (!canvas || !container) return;
 
 		if (import.meta.env.DEV && this.#fakeDismount) {
 			this.#fakeDismount = false;
 			return;
 		}
 		this.canvas = canvas;
+		this.container = container;
 		this.controller = new AbortController();
 
-		this.app = new Application();
+		if (import.meta.env.DEV)
+			window.addEventListener(
+				"keydown",
+				(ev) => {
+					console.log(ev.key);
+					if (ev.ctrlKey && ev.key === "p") {
+						this.app?.destroy();
+						this.app = null;
+						this.init().catch((e) => console.error(e));
+						console.log("Reloading....");
+					}
+				},
+				{ signal: this.controller.signal },
+			);
 
 		this.init().catch((err) => console.error(err));
 	}
