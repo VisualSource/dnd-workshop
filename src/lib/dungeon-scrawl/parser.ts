@@ -1,4 +1,4 @@
-import { Container, GpuRenderTarget, Graphics, RenderLayer } from "pixi.js";
+import { Container, Graphics, type RoundedPoint } from "pixi.js";
 import { readZip } from "./zip-reader";
 import type { DSFile } from "./types";
 import type { UUID } from "node:crypto";
@@ -117,6 +117,7 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 						color: node.grid.sharedOptions.colour.colour,
 						alpha: node.grid.sharedOptions.colour.alpha,
 						width: node.grid.linesOptions.width,
+						pixelLine: true,
 					});
 					for (let x = 0; x < 2000; x += node.grid.cellDiameter) {
 						graphics.moveTo(x, 0).lineTo(x, 2000).stroke();
@@ -216,7 +217,7 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 
 				graphics.setStrokeStyle({
 					width: node.stroke.width,
-					color: node.stroke.colour.colour,
+					color: "blue", // node.stroke.colour.colour,
 					alpha: node.stroke.colour.alpha,
 				});
 				graphics.setFillStyle({
@@ -237,20 +238,17 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const geomerty = map.data.geometry[geomertyId];
 
 				if (geomerty.polygons.length >= 1) {
+					graphics.beginPath();
 					for (const polygon of geomerty.polygons) {
 						for (const inner of polygon) {
-							for (let idx = 0; idx < inner.length; idx++) {
-								const element = inner[idx];
+							const points = inner.map(
+								(e) => ({ x: e[0], y: e[1] }) as RoundedPoint,
+							);
+							points.pop();
 
-								if (idx === 0) {
-									graphics.moveTo(element[0], element[1]);
-								} else {
-									graphics.lineTo(element[0], element[1]);
-								}
-							}
-
+							graphics.roundShape(points, node.mask ? 0 : 0.3, true, 1);
 							if (node.fill.visible || node.mask) graphics.fill();
-							if (node.stroke.visible) graphics.stroke();
+							if (node.stroke.visible && !node.mask) graphics.stroke();
 						}
 					}
 				}

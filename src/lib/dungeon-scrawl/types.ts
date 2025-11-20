@@ -15,7 +15,8 @@ export type DSFile = {
 					| DSNodeFolder
 					| DSNodeGrid
 					| DSNodeMultiPolygon
-					| DSNodeAssetGroup;
+					| DSNodeAssetGroup
+					| DSNodeShadow;
 			};
 			undoStack: unknown[];
 			undoHistoryPaused: boolean;
@@ -87,6 +88,21 @@ type DSNodePage = {
 		scale: number;
 		alpha: number;
 	};
+};
+
+type DSNodeShadow = {
+	type: "SHADOW";
+	id: UUID;
+	alpha: number;
+	name: string;
+	parentId: UUID;
+	visible: boolean;
+	castFromInternalLines: OnBeforeUnloadEventHandler;
+	tx: number;
+	ty: number;
+	colour: Color;
+	lineWidth: 0;
+	roughtOptions: "off";
 };
 
 type DSNodeImages = {
