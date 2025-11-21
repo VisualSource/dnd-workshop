@@ -2,6 +2,9 @@ import { Application, CullerPlugin, extensions } from "pixi.js";
 import { Viewport } from "pixi-viewport";
 import { parseMapFile } from "./dungeon-scrawl/parser";
 import { readFile, BaseDirectory } from "@tauri-apps/plugin-fs";
+import { emitTo, listen } from "@tauri-apps/api/event";
+import { Webview } from "@tauri-apps/api/webview";
+import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
 
 export class Engine {
 	#mountCount = 0;
@@ -30,6 +33,33 @@ export class Engine {
 
 		this.app.queueResize();
 		if (signal?.aborted) return;
+
+		if (import.meta.env.DEV) {
+			const unlisten = await listen("pixi-devtools", () => {});
+
+			this.controller?.signal.addEventListener("abort", () => {
+				unlisten();
+			});
+
+			window.addEventListener(
+				"keydown",
+				async (ev) => {
+					if (!(ev.ctrlKey && ev.key === "d")) return;
+					const webview = await Webview.getByLabel("pixi-devtools");
+					if (webview) {
+						webview.setFocus();
+						return;
+					}
+
+					const window = new WebviewWindow("pixi-devtools", {
+						url: "/pixi-devtools",
+						title: "Devtools",
+					});
+					window.show();
+				},
+				{ signal: this.controller?.signal },
+			);
+		}
 
 		const viewport = new Viewport({
 			screenWidth: this.canvas.width,
@@ -65,21 +95,6 @@ export class Engine {
 		this.canvas = canvas;
 		this.container = container;
 		this.controller = new AbortController();
-
-		if (import.meta.env.DEV)
-			window.addEventListener(
-				"keydown",
-				(ev) => {
-					console.log(ev.key);
-					if (ev.ctrlKey && ev.key === "p") {
-						this.app?.destroy();
-						this.app = null;
-						this.init().catch((e) => console.error(e));
-						console.log("Reloading....");
-					}
-				},
-				{ signal: this.controller.signal },
-			);
 
 		this.init().catch((err) => console.error(err));
 	}

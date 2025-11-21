@@ -217,7 +217,7 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 
 				graphics.setStrokeStyle({
 					width: node.stroke.width,
-					color: "blue", // node.stroke.colour.colour,
+					color: node.stroke.colour.colour,
 					alpha: node.stroke.colour.alpha,
 				});
 				graphics.setFillStyle({
@@ -258,6 +258,36 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 			case "ASSET_GROUP":
 				break;
 			case "SHADOW": {
+				if (!node.visible) break;
+
+				const geomertyId = state.getMetadata("geomertyId");
+				if (!geomertyId) throw new Error("Failed to get geomertyId");
+
+				const geometry = map.data.geometry[geomertyId];
+				if (!geometry) throw new Error("Failed to get geomerty");
+
+				const graphics = new Graphics();
+				graphics.label = "Shadow";
+
+				graphics.setStrokeStyle({
+					color: node.colour.colour,
+					alpha: node.colour.alpha,
+					width: 5,
+					alignment: 1,
+				});
+
+				for (const polygons of geometry.polygons) {
+					for (const polygon of polygons) {
+						const geo = polygon.map((point) => ({ x: point[0], y: point[1] }));
+						graphics.roundShape(geo, 0.3, true, 1).stroke();
+					}
+				}
+
+				const parent = state.openGroupsStack.at(-1);
+				if (!parent) throw new Error("Failed to get parent");
+
+				parent.container.addChild(graphics);
+
 				break;
 			}
 		}

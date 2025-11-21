@@ -9,6 +9,7 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as PixiDevtoolsRouteImport } from './routes/pixi-devtools'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as JoinSessionRouteImport } from './routes/join-session'
 import { Route as EditorSessionRouteImport } from './routes/editor-session'
@@ -16,6 +17,11 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as PlayerSessionMatchIdRouteImport } from './routes/player-session.$match-id'
 import { Route as DmSessionMatchIdRouteImport } from './routes/dm-session.$match-id'
 
+const PixiDevtoolsRoute = PixiDevtoolsRouteImport.update({
+  id: '/pixi-devtools',
+  path: '/pixi-devtools',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -52,6 +58,7 @@ export interface FileRoutesByFullPath {
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
+  '/pixi-devtools': typeof PixiDevtoolsRoute
   '/dm-session/$match-id': typeof DmSessionMatchIdRoute
   '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
@@ -60,6 +67,7 @@ export interface FileRoutesByTo {
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
+  '/pixi-devtools': typeof PixiDevtoolsRoute
   '/dm-session/$match-id': typeof DmSessionMatchIdRoute
   '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
@@ -69,6 +77,7 @@ export interface FileRoutesById {
   '/editor-session': typeof EditorSessionRoute
   '/join-session': typeof JoinSessionRoute
   '/login': typeof LoginRoute
+  '/pixi-devtools': typeof PixiDevtoolsRoute
   '/dm-session/$match-id': typeof DmSessionMatchIdRoute
   '/player-session/$match-id': typeof PlayerSessionMatchIdRoute
 }
@@ -79,6 +88,7 @@ export interface FileRouteTypes {
     | '/editor-session'
     | '/join-session'
     | '/login'
+    | '/pixi-devtools'
     | '/dm-session/$match-id'
     | '/player-session/$match-id'
   fileRoutesByTo: FileRoutesByTo
@@ -87,6 +97,7 @@ export interface FileRouteTypes {
     | '/editor-session'
     | '/join-session'
     | '/login'
+    | '/pixi-devtools'
     | '/dm-session/$match-id'
     | '/player-session/$match-id'
   id:
@@ -95,6 +106,7 @@ export interface FileRouteTypes {
     | '/editor-session'
     | '/join-session'
     | '/login'
+    | '/pixi-devtools'
     | '/dm-session/$match-id'
     | '/player-session/$match-id'
   fileRoutesById: FileRoutesById
@@ -104,12 +116,20 @@ export interface RootRouteChildren {
   EditorSessionRoute: typeof EditorSessionRoute
   JoinSessionRoute: typeof JoinSessionRoute
   LoginRoute: typeof LoginRoute
+  PixiDevtoolsRoute: typeof PixiDevtoolsRoute
   DmSessionMatchIdRoute: typeof DmSessionMatchIdRoute
   PlayerSessionMatchIdRoute: typeof PlayerSessionMatchIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/pixi-devtools': {
+      id: '/pixi-devtools'
+      path: '/pixi-devtools'
+      fullPath: '/pixi-devtools'
+      preLoaderRoute: typeof PixiDevtoolsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/login': {
       id: '/login'
       path: '/login'
@@ -160,6 +180,7 @@ const rootRouteChildren: RootRouteChildren = {
   EditorSessionRoute: EditorSessionRoute,
   JoinSessionRoute: JoinSessionRoute,
   LoginRoute: LoginRoute,
+  PixiDevtoolsRoute: PixiDevtoolsRoute,
   DmSessionMatchIdRoute: DmSessionMatchIdRoute,
   PlayerSessionMatchIdRoute: PlayerSessionMatchIdRoute,
 }
