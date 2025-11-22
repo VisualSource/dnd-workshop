@@ -238,17 +238,28 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const geomerty = map.data.geometry[geomertyId];
 
 				if (geomerty.polygons.length >= 1) {
-					graphics.beginPath();
 					for (const polygon of geomerty.polygons) {
-						for (const inner of polygon) {
-							const points = inner.map(
-								(e) => ({ x: e[0], y: e[1] }) as RoundedPoint,
-							);
-							points.pop();
+						const base = polygon.at(0);
+						if (!base) continue;
 
-							graphics.roundShape(points, node.mask ? 0 : 0.3, true, 1);
-							if (node.fill.visible || node.mask) graphics.fill();
-							if (node.stroke.visible && !node.mask) graphics.stroke();
+						const basePoints: RoundedPoint[] = base.map((point) => ({
+							x: point[0],
+							y: point[1],
+						}));
+						basePoints.pop();
+
+						graphics.roundShape(basePoints, node.mask ? 0 : 0.3, true, 1);
+
+						if (node.fill.visible || node.mask) graphics.fill();
+						if (node.stroke.visible && !node.mask) graphics.stroke();
+
+						for (const points of polygon.slice(1)) {
+							const roundedPoints: RoundedPoint[] = points.map((e) => ({
+								x: e[0],
+								y: e[1],
+							}));
+							roundedPoints.pop();
+							graphics.roundShape(roundedPoints, 0.3, true, 1).cut();
 						}
 					}
 				}
@@ -269,17 +280,31 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const graphics = new Graphics();
 				graphics.label = "Shadow";
 
-				graphics.setStrokeStyle({
-					color: node.colour.colour,
-					alpha: node.colour.alpha,
-					width: 5,
-					alignment: 1,
-				});
-
 				for (const polygons of geometry.polygons) {
 					for (const polygon of polygons) {
-						const geo = polygon.map((point) => ({ x: point[0], y: point[1] }));
-						graphics.roundShape(geo, 0.3, true, 1).stroke();
+						let lastPoint: [number, number] | undefined;
+						for (let idx = 0; idx < polygon.length; idx++) {
+							const point = polygon[idx];
+
+							if (idx === 0) {
+								graphics.moveTo(point[0], point[1]);
+							} else {
+								const slope =
+									(point[1] - lastPoint[1]) / (point[0] - lastPoint[0]);
+								const isHorizontal = slope === 0;
+
+								if (!isHorizontal) continue;
+
+								graphics.lineTo(point[0], point[1]).stroke({
+									width: node.ty,
+									alignment: 0,
+									color: node.colour.colour,
+									alpha: node.colour.alpha,
+								});
+							}
+
+							lastPoint = point;
+						}
 					}
 				}
 

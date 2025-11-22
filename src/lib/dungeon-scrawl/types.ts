@@ -115,6 +115,16 @@ type DSNodeImages = {
 	children: UUID[];
 };
 
+type Template = {
+	dungeonShape: UUID;
+	floor: UUID;
+	grid: UUID;
+	walls: UUID;
+};
+
+type ClassicTemplate = Template & { type: "CLASSIC" };
+type LevelDesignTemplate = Template & { type: "LEVEL_DESIGN"; shadow: UUID };
+
 type DSNodeTemplate = {
 	type: "TEMPLATE";
 	id: UUID;
@@ -123,13 +133,7 @@ type DSNodeTemplate = {
 	name: string;
 	visible: boolean;
 	children: UUID[];
-	template: {
-		type: "CLASSIC";
-		dungeonShape: UUID;
-		floor: UUID;
-		grid: UUID;
-		walls: UUID;
-	};
+	template: ClassicTemplate | LevelDesignTemplate;
 };
 
 type DSNodeGeometry = {

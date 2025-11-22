@@ -8,19 +8,19 @@
 					"type": "DOCUMENT",
 					"id": "document",
 					"name": "My campaign",
-					"selectedPage": "86c983ae-1e2c-4b73-9cd6-f842d39a2438",
-					"children": ["86c983ae-1e2c-4b73-9cd6-f842d39a2438"]
+					"selectedPage": "159cbccf-33c4-41af-9ac4-2c8955281d20",
+					"children": ["159cbccf-33c4-41af-9ac4-2c8955281d20"]
 				},
-				"86c983ae-1e2c-4b73-9cd6-f842d39a2438": {
+				"159cbccf-33c4-41af-9ac4-2c8955281d20": {
 					"type": "PAGE",
-					"id": "86c983ae-1e2c-4b73-9cd6-f842d39a2438",
+					"id": "159cbccf-33c4-41af-9ac4-2c8955281d20",
 					"parentId": "document",
 					"name": "",
 					"children": [
-						"608fe3d2-8038-4a34-8ab0-0891360c3740",
-						"663f06e9-f41b-4939-917a-6a2eaf1e9d1f"
+						"63a58d74-24bc-4e48-a08e-a58d9cfdb893",
+						"7d36209f-eada-4f14-915b-08681867a0c9"
 					],
-					"selection": ["608fe3d2-8038-4a34-8ab0-0891360c3740"],
+					"selection": ["63a58d74-24bc-4e48-a08e-a58d9cfdb893"],
 					"alpha": 1,
 					"objectSelection": [],
 					"pageTransform": "default",
@@ -42,66 +42,66 @@
 					},
 					"texture": { "enabled": false, "scale": 1, "alpha": 1 }
 				},
-				"663f06e9-f41b-4939-917a-6a2eaf1e9d1f": {
+				"7d36209f-eada-4f14-915b-08681867a0c9": {
 					"type": "IMAGES",
-					"id": "663f06e9-f41b-4939-917a-6a2eaf1e9d1f",
+					"id": "7d36209f-eada-4f14-915b-08681867a0c9",
 					"alpha": 1,
-					"parentId": "86c983ae-1e2c-4b73-9cd6-f842d39a2438",
+					"parentId": "159cbccf-33c4-41af-9ac4-2c8955281d20",
 					"name": "Images",
 					"visible": true,
 					"children": []
 				},
-				"608fe3d2-8038-4a34-8ab0-0891360c3740": {
+				"63a58d74-24bc-4e48-a08e-a58d9cfdb893": {
 					"type": "TEMPLATE",
-					"id": "608fe3d2-8038-4a34-8ab0-0891360c3740",
+					"id": "63a58d74-24bc-4e48-a08e-a58d9cfdb893",
 					"alpha": 1,
-					"parentId": "86c983ae-1e2c-4b73-9cd6-f842d39a2438",
+					"parentId": "159cbccf-33c4-41af-9ac4-2c8955281d20",
 					"name": "Classic Gray 1",
 					"visible": true,
-					"children": ["403405a0-d8f6-4484-bbb6-526e3dee9112"],
+					"children": ["177cee9f-54e5-4ca8-b792-826886db2266"],
 					"template": {
 						"type": "LEVEL_DESIGN",
-						"dungeonShape": "403405a0-d8f6-4484-bbb6-526e3dee9112",
-						"floor": "dde3585d-8b7e-422a-884b-fe65d2d1a1ad",
-						"grid": "632d2e95-2066-4a0c-9b15-b58b54db014c",
-						"walls": "473fa998-54a4-448f-810d-aad7fb2767a8",
-						"shadow": "822bdf05-1894-4a5f-aa65-bf676d798e00"
+						"dungeonShape": "177cee9f-54e5-4ca8-b792-826886db2266",
+						"floor": "5cb836a1-876c-4175-bb03-aa9baf05c82f",
+						"grid": "266ea427-ed0c-4b31-8620-7d3b908239f8",
+						"walls": "16e7f9bb-0b82-4271-b10a-81158b949f9a",
+						"shadow": "db6c231c-1f24-4fbf-903a-c732abe8be55"
 					}
 				},
-				"403405a0-d8f6-4484-bbb6-526e3dee9112": {
+				"177cee9f-54e5-4ca8-b792-826886db2266": {
 					"type": "GEOMETRY",
-					"id": "403405a0-d8f6-4484-bbb6-526e3dee9112",
+					"id": "177cee9f-54e5-4ca8-b792-826886db2266",
 					"alpha": 1,
-					"parentId": "608fe3d2-8038-4a34-8ab0-0891360c3740",
+					"parentId": "63a58d74-24bc-4e48-a08e-a58d9cfdb893",
 					"name": "Classic Gray 1",
 					"visible": true,
 					"children": [
-						"dde3585d-8b7e-422a-884b-fe65d2d1a1ad",
-						"0ffba32c-c392-4f78-a723-39d9a0f7bdc4",
-						"473fa998-54a4-448f-810d-aad7fb2767a8"
+						"5cb836a1-876c-4175-bb03-aa9baf05c82f",
+						"bcc0923d-74f5-462e-af8d-195bf8b5fde8",
+						"16e7f9bb-0b82-4271-b10a-81158b949f9a"
 					],
 					"backgroundEffect": {},
-					"geometryId": "018c96c0-dd54-41d8-87c4-bf1e539f6418"
+					"geometryId": "b0d6de5b-aa2f-4a42-8311-9cffbd00192c"
 				},
-				"0ffba32c-c392-4f78-a723-39d9a0f7bdc4": {
+				"bcc0923d-74f5-462e-af8d-195bf8b5fde8": {
 					"type": "FOLDER",
-					"id": "0ffba32c-c392-4f78-a723-39d9a0f7bdc4",
+					"id": "bcc0923d-74f5-462e-af8d-195bf8b5fde8",
 					"alpha": 1,
-					"parentId": "403405a0-d8f6-4484-bbb6-526e3dee9112",
+					"parentId": "177cee9f-54e5-4ca8-b792-826886db2266",
 					"name": "Grid",
 					"visible": true,
 					"children": [
-						"020c0ea8-87b9-435e-81c0-2a111f4c7481",
-						"822bdf05-1894-4a5f-aa65-bf676d798e00",
-						"632d2e95-2066-4a0c-9b15-b58b54db014c"
+						"18ec6896-566a-4580-ba26-13eee75f9472",
+						"db6c231c-1f24-4fbf-903a-c732abe8be55",
+						"266ea427-ed0c-4b31-8620-7d3b908239f8"
 					]
 				},
-				"632d2e95-2066-4a0c-9b15-b58b54db014c": {
+				"266ea427-ed0c-4b31-8620-7d3b908239f8": {
 					"type": "GRID",
-					"id": "632d2e95-2066-4a0c-9b15-b58b54db014c",
+					"id": "266ea427-ed0c-4b31-8620-7d3b908239f8",
 					"alpha": 1,
 					"name": "Grid",
-					"parentId": "0ffba32c-c392-4f78-a723-39d9a0f7bdc4",
+					"parentId": "bcc0923d-74f5-462e-af8d-195bf8b5fde8",
 					"visible": true,
 					"gridType": "square",
 					"variant": "clean",
@@ -132,12 +132,12 @@
 						"colour": { "colour": 5592405, "alpha": 1 }
 					}
 				},
-				"020c0ea8-87b9-435e-81c0-2a111f4c7481": {
+				"18ec6896-566a-4580-ba26-13eee75f9472": {
 					"type": "MULTIPOLYGON",
-					"id": "020c0ea8-87b9-435e-81c0-2a111f4c7481",
+					"id": "18ec6896-566a-4580-ba26-13eee75f9472",
 					"alpha": 1,
 					"name": "Mask",
-					"parentId": "0ffba32c-c392-4f78-a723-39d9a0f7bdc4",
+					"parentId": "bcc0923d-74f5-462e-af8d-195bf8b5fde8",
 					"mask": true,
 					"visible": true,
 					"blendMode": "normal",
@@ -152,12 +152,12 @@
 						"colour": { "colour": 16777215, "alpha": 1 }
 					}
 				},
-				"dde3585d-8b7e-422a-884b-fe65d2d1a1ad": {
+				"5cb836a1-876c-4175-bb03-aa9baf05c82f": {
 					"type": "MULTIPOLYGON",
-					"id": "dde3585d-8b7e-422a-884b-fe65d2d1a1ad",
+					"id": "5cb836a1-876c-4175-bb03-aa9baf05c82f",
 					"alpha": 1,
 					"name": "Floor",
-					"parentId": "403405a0-d8f6-4484-bbb6-526e3dee9112",
+					"parentId": "177cee9f-54e5-4ca8-b792-826886db2266",
 					"mask": false,
 					"visible": true,
 					"blendMode": "normal",
@@ -172,12 +172,12 @@
 						"colour": { "colour": 16777215, "alpha": 1 }
 					}
 				},
-				"473fa998-54a4-448f-810d-aad7fb2767a8": {
+				"16e7f9bb-0b82-4271-b10a-81158b949f9a": {
 					"type": "MULTIPOLYGON",
-					"id": "473fa998-54a4-448f-810d-aad7fb2767a8",
+					"id": "16e7f9bb-0b82-4271-b10a-81158b949f9a",
 					"alpha": 1,
 					"name": "Walls",
-					"parentId": "403405a0-d8f6-4484-bbb6-526e3dee9112",
+					"parentId": "177cee9f-54e5-4ca8-b792-826886db2266",
 					"mask": false,
 					"visible": true,
 					"blendMode": "normal",
@@ -192,12 +192,12 @@
 						"colour": { "colour": 16777215, "alpha": 1 }
 					}
 				},
-				"822bdf05-1894-4a5f-aa65-bf676d798e00": {
+				"db6c231c-1f24-4fbf-903a-c732abe8be55": {
 					"type": "SHADOW",
-					"id": "822bdf05-1894-4a5f-aa65-bf676d798e00",
+					"id": "db6c231c-1f24-4fbf-903a-c732abe8be55",
 					"alpha": 1,
 					"name": "",
-					"parentId": "0ffba32c-c392-4f78-a723-39d9a0f7bdc4",
+					"parentId": "bcc0923d-74f5-462e-af8d-195bf8b5fde8",
 					"visible": true,
 					"castFromInternalLines": true,
 					"tx": 5,
@@ -214,32 +214,23 @@
 	},
 	"data": {
 		"geometry": {
-			"018c96c0-dd54-41d8-87c4-bf1e539f6418": {
+			"b0d6de5b-aa2f-4a42-8311-9cffbd00192c": {
 				"polygons": [
 					[
 						[
-							[396.01, 396.01],
-							[612.01, 396.01],
-							[612.01, 324.01],
-							[900.01, 324.01],
-							[900.01, 180.01],
-							[1187.99, 180.01],
-							[1187.99, 324.01],
-							[1439.99, 324.01],
-							[1439.99, 827.99],
-							[1259.99, 827.99],
-							[1259.99, 972.01],
-							[1800.01, 972.01],
-							[1800.01, 198.01],
-							[2015.99, 198.01],
-							[2015.99, 1223.99],
-							[972.01, 1223.99],
-							[972.01, 827.99],
-							[612.01, 827.99],
-							[612.01, 683.99],
-							[396.01, 683.99],
-							[396.01, 396.01]
-						]
+							[216.01, 324.01],
+							[432.01, 324.01],
+							[432.01, 180.01],
+							[1313.99, 180.01],
+							[1313.99, 791.99],
+							[432.01, 791.99],
+							[432.01, 539.99],
+							[216.01, 539.99],
+							[216.01, 324.01]
+						],
+						[[612, 324], [612, 540], [972, 540], [972, 324], [612, 324]],
+						[[612, 594], [612, 720], [972, 720], [972, 594], [612, 594]],
+						[[1080, 324], [1080, 720], [1224, 720], [1224, 324], [1080, 324]]
 					]
 				],
 				"polylines": []

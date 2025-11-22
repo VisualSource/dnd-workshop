@@ -5,7 +5,13 @@ const asString = (buffer: Uint8Array<ArrayBuffer>): string => {
 };
 const crc32Check = (value: number, content: Uint8Array<ArrayBuffer>) => {};
 
-const eocd = (buffer: Uint8Array<ArrayBuffer>) => {
+/**
+ * End of central directory record
+ *
+ * After all the central directory entries comes the end of central directory (EOCD) record, which marks the end of the ZIP file
+ * @see https://en.wikipedia.org/wiki/ZIP_(file_format)#End_of_central_directory_record_(EOCD)
+ */
+const parseEOCD = (buffer: Uint8Array<ArrayBuffer>) => {
 	if (
 		!(
 			buffer[0] === 0x50 &&
@@ -40,7 +46,13 @@ const eocd = (buffer: Uint8Array<ArrayBuffer>) => {
 	};
 };
 
-const centralDirFileHeader = (file: Uint8Array<ArrayBuffer>) => {
+/**
+ * Central directory file header (CDFH)
+ *
+ * The central directory file header entry is an expanded form of the local header:
+ * @see https://en.wikipedia.org/wiki/ZIP_(file_format)#Central_directory_file_header_(CDFH)
+ */
+const parseCDFH = (file: Uint8Array<ArrayBuffer>) => {
 	if (
 		!(
 			file[0] === 0x50 &&
@@ -102,7 +114,12 @@ const centralDirFileHeader = (file: Uint8Array<ArrayBuffer>) => {
 	};
 };
 
-const localFileHeader = (file: Uint8Array<ArrayBuffer>) => {
+/**
+ * Local file header
+ *
+ * @see https://en.wikipedia.org/wiki/ZIP_(file_format)#Local_file_header
+ */
+const parseLocalFileHeader = (file: Uint8Array<ArrayBuffer>) => {
 	const header = file.slice(0, 4);
 	if (
 		!(
@@ -130,29 +147,28 @@ const localFileHeader = (file: Uint8Array<ArrayBuffer>) => {
 	const fileNameLen = view.getUint16(26, true);
 	const extraFieldLen = view.getUint16(28, true);
 
-	const fileName = file.slice(30, 30 + fileNameLen);
-	const extraField = file.slice(
-		30 + fileNameLen,
-		30 + fileNameLen + extraFieldLen,
-	);
+	const fileNameOffseEnd = 30 + fileNameLen;
+	const fileName = file.slice(30, fileNameOffseEnd);
 
-	const endOfHeaderOffset = 30 + fileNameLen + extraFieldLen;
+	const extraFieldEnd = fileNameOffseEnd + extraFieldLen;
+	const extraField = file.slice(fileNameOffseEnd, extraFieldEnd);
+
 	const endOfContentOffset =
-		endOfHeaderOffset +
+		extraFieldEnd +
 		(compressionMethod === 8 ? compressedSize : uncompressedSize);
-	const content = file.slice(endOfHeaderOffset, endOfContentOffset);
+	const content = file.slice(extraFieldEnd, endOfContentOffset);
+
+	if (compressionMethod !== 0)
+		throw new Error(
+			`supported is not supported. Whated: ${compressionMethod === 8 ? "DEFLATE" : compressionMethod}`,
+		);
 
 	crc32Check(crc32, content);
 
 	return {
 		extractionVersion,
 		generalPurposeBitFlag,
-		compressionMethod:
-			compressionMethod === 8
-				? "DEFLATE"
-				: compressionMethod === 0
-					? "none"
-					: "unknown",
+		compressionMethod,
 		lastModDate,
 		lastModTime,
 		crc32,
@@ -190,22 +206,22 @@ export const readZip = (file: Uint8Array<ArrayBuffer>) => {
 
 	if (eocdByteOffset <= 0) throw new Error("Failed to find EOCD header");
 
-	const eocdHeader = eocd(file.slice(eocdByteOffset));
+	const eocdHeader = parseEOCD(file.slice(eocdByteOffset));
 	const centralDirHeaderBytes = file.slice(
 		eocdHeader.offsetOfStartCtrlDirRelStart,
 		eocdHeader.offsetOfStartCtrlDirRelStart + eocdHeader.sizeOfCentralDirBytes,
 	);
 
-	const files: Record<string, ReturnType<typeof localFileHeader>> = {};
+	const files: Record<string, ReturnType<typeof parseLocalFileHeader>> = {};
 
 	let headerBytesRead = 0;
 	while (headerBytesRead < centralDirHeaderBytes.byteLength) {
-		const header = centralDirFileHeader(
-			centralDirHeaderBytes.slice(headerBytesRead),
-		);
+		const header = parseCDFH(centralDirHeaderBytes.slice(headerBytesRead));
 		headerBytesRead += header.readBytes;
 
-		const lf = localFileHeader(file.slice(header.relativeOffsetLocalHeader));
+		const lf = parseLocalFileHeader(
+			file.slice(header.relativeOffsetLocalHeader),
+		);
 		files[header.fileName] = lf;
 	}
 

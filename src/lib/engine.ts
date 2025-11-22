@@ -71,7 +71,7 @@ export class Engine {
 		this.app.stage.addChild(viewport);
 		viewport.drag().pinch().wheel();
 
-		const file = await readFile("dungeon(3).ds", {
+		const file = await readFile("dungeon.ds", {
 			baseDir: BaseDirectory.Download,
 		});
 
