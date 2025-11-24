@@ -34,6 +34,14 @@ export class Engine {
 		this.app.queueResize();
 		if (signal?.aborted) return;
 
+		window.addEventListener(
+			"workshopt::pixi-resize",
+			() => {
+				this.app?.queueResize();
+			},
+			{ signal: signal },
+		);
+
 		if (import.meta.env.DEV) {
 			const unlisten = await listen("pixi-devtools", () => {});
 

@@ -22,12 +22,10 @@ export function NavMain({
 }: {
 	items: {
 		title: string;
-		url: string;
 		icon: LucideIcon;
 		isActive?: boolean;
 		items?: {
 			title: string;
-			url: string;
 		}[];
 	}[];
 }) {
@@ -39,10 +37,10 @@ export function NavMain({
 					<Collapsible key={item.title} asChild defaultOpen={item.isActive}>
 						<SidebarMenuItem>
 							<SidebarMenuButton asChild tooltip={item.title}>
-								<a href={item.url}>
+								<button type="button">
 									<item.icon />
 									<span>{item.title}</span>
-								</a>
+								</button>
 							</SidebarMenuButton>
 							{item.items?.length ? (
 								<>
@@ -57,9 +55,7 @@ export function NavMain({
 											{item.items?.map((subItem) => (
 												<SidebarMenuSubItem key={subItem.title}>
 													<SidebarMenuSubButton asChild>
-														<a href={subItem.url}>
-															<span>{subItem.title}</span>
-														</a>
+														<span>{subItem.title}</span>
 													</SidebarMenuSubButton>
 												</SidebarMenuSubItem>
 											))}

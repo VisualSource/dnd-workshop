@@ -16,6 +16,9 @@
 		},
 		"opener:default",
 		"dialog:default",
-		"fs:default"
+		"fs:default",
+		"updater:default",
+		"process:allow-restart",
+		"process:allow-exit"
 	]
 }

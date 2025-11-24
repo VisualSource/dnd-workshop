@@ -8,7 +8,6 @@ import {
 	PieChart,
 	Send,
 	Settings2,
-	SquareTerminal,
 } from "lucide-react";
 
 import { NavMain } from "./nav-main";
@@ -24,6 +23,7 @@ import {
 	SidebarMenuButton,
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
+import { useParams } from "@tanstack/react-router";
 
 const data = {
 	user: {
@@ -33,9 +33,8 @@ const data = {
 	},
 	navMain: [
 		{
-			title: "Playground",
-			url: "#",
-			icon: SquareTerminal,
+			title: "Maps",
+			icon: MapIcon,
 			isActive: true,
 			items: [
 				{
@@ -150,6 +149,8 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+	const routeParams = useParams({ from: "/dm-session/$match-id" });
+
 	return (
 		<Sidebar {...props}>
 			<SidebarHeader>
@@ -162,7 +163,9 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
 								</div>
 								<div className="grid flex-1 text-left text-sm leading-tight">
 									<span className="truncate font-medium">Session</span>
-									<span className="truncate text-xs">SessionLabel</span>
+									<span className="truncate text-xs">
+										{routeParams["match-id"]}
+									</span>
 								</div>
 							</div>
 						</SidebarMenuButton>

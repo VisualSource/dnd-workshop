@@ -15,6 +15,7 @@ import {
 } from "@/components/ui/sidebar";
 import { createFileRoute, redirect, useBlocker } from "@tanstack/react-router";
 import { confirm } from "@tauri-apps/plugin-dialog";
+import { useCallback } from "react";
 
 export const Route = createFileRoute("/dm-session/$match-id")({
 	beforeLoad({ context, location }) {
@@ -49,8 +50,12 @@ function RouteComponent() {
 		},
 	});
 
+	const onTransitionEnd = useCallback(() => {
+		window.dispatchEvent(new Event("workshopt::pixi-resize"));
+	}, []);
+
 	return (
-		<SidebarProvider>
+		<SidebarProvider onTransitionEnd={onTransitionEnd}>
 			<AppSidebar />
 			<SidebarInset className="dm-sidebar-content overflow-hidden @container">
 				<header className="flex row-start-1 row-end-1 items-center">

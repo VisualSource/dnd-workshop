@@ -1,5 +1,9 @@
 import type { UUID } from "node:crypto";
 
+export type Point = [number, number];
+type ShapePart = Point[];
+type Shape = ShapePart[];
+
 export type DSFile = {
 	version: number;
 	state: {
@@ -27,7 +31,7 @@ export type DSFile = {
 		geometry: Record<
 			UUID,
 			{
-				polygons: [number, number][][][];
+				polygons: Shape[];
 				polylines: number[];
 			}
 		>;

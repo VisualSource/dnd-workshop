@@ -1,6 +1,6 @@
 import { Container, Graphics, type RoundedPoint } from "pixi.js";
 import { readZip } from "./zip-reader";
-import type { DSFile } from "./types";
+import type { DSFile, Point } from "./types";
 import type { UUID } from "node:crypto";
 
 type ParserState = {
@@ -282,26 +282,26 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 
 				for (const polygons of geometry.polygons) {
 					for (const polygon of polygons) {
-						let lastPoint: [number, number] | undefined;
-						for (let idx = 0; idx < polygon.length; idx++) {
-							const point = polygon[idx];
+						let lastPoint: Point | undefined;
 
-							if (idx === 0) {
-								graphics.moveTo(point[0], point[1]);
-							} else {
-								const slope =
-									(point[1] - lastPoint[1]) / (point[0] - lastPoint[0]);
-								const isHorizontal = slope === 0;
+						for (const point of polygon) {
+							if (!lastPoint) {
+								lastPoint = point;
+								continue;
+							}
+							const isHorizontal = isHorizontalLine(lastPoint, point);
 
-								if (!isHorizontal) continue;
-
-								graphics.lineTo(point[0], point[1]).stroke({
-									width: node.ty,
-									alignment: 0,
+							graphics
+								.moveTo(lastPoint[0], lastPoint[1])
+								.lineTo(point[0], point[1])
+								.stroke({
+									width: isHorizontal ? node.ty : node.tx,
 									color: node.colour.colour,
 									alpha: node.colour.alpha,
+									alignment: isHorizontal
+										? getHorizontalAligment(lastPoint[0], point[0])
+										: getVerticalAligment(lastPoint[1], point[1]),
 								});
-							}
 
 							lastPoint = point;
 						}
@@ -324,4 +324,19 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 		map: root,
 		bgColor,
 	};
+};
+
+const isHorizontalLine = (point1: Point, point2: Point): boolean => {
+	const slope = (point2[1] - point1[1]) / (point1[0] - point2[0]);
+	return slope === 0;
+};
+
+const getHorizontalAligment = (x1: number, x2: number): number => {
+	const sign = Math.sign(x1 - x2);
+	return sign === -1 ? 0 : 1;
+};
+
+const getVerticalAligment = (y1: number, y2: number): number => {
+	const sign = Math.sign(y1 - y2);
+	return sign === -1 ? 1 : 0;
 };

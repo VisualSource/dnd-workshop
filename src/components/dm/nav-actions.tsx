@@ -37,8 +37,11 @@ import {
 const data = [
 	[
 		{
-			label: "Customize Page",
+			label: "Force Resize",
 			icon: Settings2,
+			onClick: () => {
+				window.dispatchEvent(new Event("workshopt::pixi-resize"));
+			},
 		},
 		{
 			label: "Turn into wiki",
@@ -127,7 +130,7 @@ export function NavActions() {
 										<SidebarMenu>
 											{group.map((item, index) => (
 												<SidebarMenuItem key={`index_${index + 1}`}>
-													<SidebarMenuButton>
+													<SidebarMenuButton onClick={item.onClick}>
 														<item.icon /> <span>{item.label}</span>
 													</SidebarMenuButton>
 												</SidebarMenuItem>
