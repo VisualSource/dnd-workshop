@@ -1,4 +1,4 @@
-import { Container, Graphics, type RoundedPoint } from "pixi.js";
+import { Container, Graphics, Polygon, type RoundedPoint } from "pixi.js";
 import { readZip } from "./zip-reader";
 import type { DSFile, Point } from "./types";
 import type { UUID } from "node:crypto";
@@ -142,8 +142,20 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 					visible: node.visible,
 				});
 
+				const shapeNodeId = node.template.dungeonShape
+				const geoNode = map.state.document.nodes[shapeNodeId]
+
+				const bounds = new Polygon();
+				if(geoNode.type === "GEOMETRY"){
+					const geo = map.data.geometry[geoNode.geometryId];
+
+					// CALC bounds + 100 offset
+				}
+
 				state.appendChild(node.parentId, container);
-				state.queueChildren(node.id, node.children, container);
+				state.queueChildren(node.id, node.children, container,{ bounds });
+
+
 				break;
 			}
 			case "GEOMETRY": {
