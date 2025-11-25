@@ -9,3 +9,4 @@ This template should help get you started developing with Tauri, React and Types
 
 https://www.redblobgames.com/articles/visibility/ 
 https://www.dungeonscrawl.com/
+https://medium.com/@priyanshu_verma/a-masochists-guide-to-building-an-http-server-in-rust-b25741e8e597
