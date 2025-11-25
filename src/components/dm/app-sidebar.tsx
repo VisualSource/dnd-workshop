@@ -3,7 +3,6 @@ import {
 	Bot,
 	Command,
 	Frame,
-	LifeBuoy,
 	MapIcon,
 	PieChart,
 	Send,
@@ -24,6 +23,7 @@ import {
 	SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useParams } from "@tanstack/react-router";
+import Shake, { ShakeScreen } from '@shakebugs/browser';
 
 const data = {
 	user: {
@@ -39,34 +39,27 @@ const data = {
 			items: [
 				{
 					title: "History",
-					url: "#",
 				},
 				{
 					title: "Starred",
-					url: "#",
 				},
 				{
 					title: "Settings",
-					url: "#",
 				},
 			],
 		},
 		{
-			title: "Models",
-			url: "#",
+			title: "Players",
 			icon: Bot,
 			items: [
 				{
 					title: "Genesis",
-					url: "#",
 				},
 				{
 					title: "Explorer",
-					url: "#",
 				},
 				{
 					title: "Quantum",
-					url: "#",
 				},
 			],
 		},
@@ -119,13 +112,8 @@ const data = {
 	],
 	navSecondary: [
 		{
-			title: "Support",
-			url: "#",
-			icon: LifeBuoy,
-		},
-		{
 			title: "Feedback",
-			url: "#",
+			onClick: () => Shake.show(ShakeScreen.HOME_SCREEN),
 			icon: Send,
 		},
 	],

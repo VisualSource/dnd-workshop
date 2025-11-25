@@ -36,21 +36,17 @@ export function NavMain({
 				{items.map((item) => (
 					<Collapsible key={item.title} asChild defaultOpen={item.isActive}>
 						<SidebarMenuItem>
-							<SidebarMenuButton asChild tooltip={item.title}>
-								<button type="button">
-									<item.icon />
-									<span>{item.title}</span>
-								</button>
-							</SidebarMenuButton>
-							{item.items?.length ? (
-								<>
-									<CollapsibleTrigger asChild>
-										<SidebarMenuAction className="data-[state=open]:rotate-90">
-											<ChevronRight />
-											<span className="sr-only">Toggle</span>
-										</SidebarMenuAction>
-									</CollapsibleTrigger>
-									<CollapsibleContent>
+							<CollapsibleTrigger asChild>
+								<SidebarMenuButton asChild tooltip={item.title} className="group cursor-pointer">
+									<button type="button">
+										<item.icon />
+										<span>{item.title}</span>
+
+										<span className="group-data-[state=open]:rotate-90 ml-auto"><ChevronRight /></span>
+									</button>
+								</SidebarMenuButton>
+							</CollapsibleTrigger>
+							<CollapsibleContent>
 										<SidebarMenuSub>
 											{item.items?.map((subItem) => (
 												<SidebarMenuSubItem key={subItem.title}>
@@ -61,8 +57,7 @@ export function NavMain({
 											))}
 										</SidebarMenuSub>
 									</CollapsibleContent>
-								</>
-							) : null}
+					
 						</SidebarMenuItem>
 					</Collapsible>
 				))}

@@ -38,6 +38,9 @@ importers:
       '@radix-ui/react-tooltip':
         specifier: ^1.2.8
         version: 1.2.8(@types/react-dom@19.2.3(@types/react@19.2.6))(@types/react@19.2.6)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
+      '@shakebugs/browser':
+        specifier: ^3.2.0
+        version: 3.2.0
       '@tanstack/react-router':
         specifier: ^1.139.3
         version: 1.139.3(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
@@ -1044,6 +1047,9 @@ packages:
 
   '@scarf/scarf@1.4.0':
     resolution: {integrity: sha512-xxeapPiUXdZAE3che6f3xogoJPeZgig6omHEy1rIY5WVsB3H2BHNnZH+gHG6x91SCWyQCzWGsuL2Hh3ClO5/qQ==}
+
+  '@shakebugs/browser@3.2.0':
+    resolution: {integrity: sha512-3VYhWVPhEd8C5yfehiifWvWxOXNPjFsJ5IDEAHS8SqLZAgwOvgaB6AxZz3Qfq+8aM5mVJVeXgWb+GO8AhN0rUg==}
 
   '@tailwindcss/node@4.1.17':
     resolution: {integrity: sha512-csIkHIgLb3JisEFQ0vxr2Y57GUNYh447C8xzwj89U/8fdW8LhProdxvnVH6U8M2Y73QKiTIH+LWbK3V2BBZsAg==}
@@ -2746,6 +2752,8 @@ snapshots:
     optional: true
 
   '@scarf/scarf@1.4.0': {}
+
+  '@shakebugs/browser@3.2.0': {}
 
   '@tailwindcss/node@4.1.17':
     dependencies:
