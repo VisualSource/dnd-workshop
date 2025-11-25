@@ -1,7 +1,21 @@
-import { Container, Graphics, Polygon, type RoundedPoint } from "pixi.js";
+import { Container, Graphics, Rectangle, type RoundedPoint } from "pixi.js";
 import { readZip } from "./zip-reader";
 import type { DSFile, Point } from "./types";
 import type { UUID } from "node:crypto";
+import {
+	drawGrid,
+	getBoundingBox,
+	getHorizontalAligment,
+	getVerticalAligment,
+	isHorizontalLine,
+} from "./utils";
+
+type Metadata = {
+	pageId?: UUID;
+	geomertyId?: UUID;
+	bounds?: Rectangle;
+	cellDiameter?: number;
+};
 
 type ParserState = {
 	pageId: UUID;
@@ -10,18 +24,15 @@ type ParserState = {
 		container: Container;
 		nodeId: UUID;
 		lastChildUUID: UUID;
-		metadata: {
-			pageId?: UUID;
-			geomertyId?: UUID;
-		};
+		metadata: Metadata;
 	}[];
-	getMetadata(key: "geomertyId" | "pageId"): UUID | null;
+	getMetadata<T extends keyof Metadata>(key: T): Metadata[T] | null;
 	popOpenGroup(nodeId: UUID): void;
 	queueChildren(
 		nodeId: UUID,
 		children: UUID[],
 		container: Container,
-		metadata?: { pageId?: UUID; geomertyId?: UUID },
+		metadata?: Metadata,
 	): void;
 	appendChild(parentId: UUID, item: Container): void;
 };
@@ -96,37 +107,23 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				root.addChild(continer);
 				state.queueChildren(node.id, node.children, continer, {
 					pageId: node.id,
+					cellDiameter: node.grid.cellDiameter,
 				});
 
 				const graphics = new Graphics({
 					label: "Background",
 				});
 
-				if (node.grid.variant === "dots") {
-					graphics.setFillStyle({
-						color: node.grid.sharedOptions.colour.colour,
-						alpha: node.grid.sharedOptions.colour.alpha,
-					});
-					for (let x = 0; x < 10_000; x += node.grid.cellDiameter) {
-						for (let y = 0; y < 10_000; y += node.grid.cellDiameter) {
-							graphics.circle(x, y, node.grid.dotsOptions.radius).fill();
-						}
-					}
-				} else if (node.grid.variant === "lines") {
-					graphics.setStrokeStyle({
-						color: node.grid.sharedOptions.colour.colour,
-						alpha: node.grid.sharedOptions.colour.alpha,
-						width: node.grid.linesOptions.width,
-						pixelLine: true,
-					});
-					for (let x = 0; x < 2000; x += node.grid.cellDiameter) {
-						graphics.moveTo(x, 0).lineTo(x, 2000).stroke();
-					}
-
-					for (let y = 0; y < 2000; y += node.grid.cellDiameter) {
-						graphics.moveTo(0, y).lineTo(2000, y).stroke();
-					}
-				}
+				drawGrid(
+					graphics,
+					node.grid.variant,
+					new Rectangle(0, 0, 1400, 1400),
+					node.grid.cellDiameter,
+					node.grid.sharedOptions.colour,
+					node.grid.variant === "dots"
+						? node.grid.dotsOptions.radius
+						: node.grid.linesOptions.width,
+				);
 
 				continer.addChild(graphics);
 
@@ -144,17 +141,18 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 
 				const shapeNodeId = node.template.dungeonShape
 				const geoNode = map.state.document.nodes[shapeNodeId]
+				if (geoNode.type !== "GEOMETRY")
+					throw new Error("Failed get map bounds");
 
-				const bounds = new Polygon();
-				if(geoNode.type === "GEOMETRY"){
-					const geo = map.data.geometry[geoNode.geometryId];
+				const geo = map.data.geometry[geoNode.geometryId];
 
-					// CALC bounds + 100 offset
-				}
+				const cellDiameter = state.getMetadata("cellDiameter");
+				if (!cellDiameter) throw new Error("Failed to get cell diameter");
 
+				const bounds = getBoundingBox(geo.polygons, cellDiameter);
+				
 				state.appendChild(node.parentId, container);
 				state.queueChildren(node.id, node.children, container,{ bounds });
-
 
 				break;
 			}
@@ -200,20 +198,34 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 				const page = map.state.document.nodes[pageId];
 				if (!page || page.type !== "PAGE") throw new Error("Invalid page");
 
-				graphics.setStrokeStyle({
-					color: node.cleanOptions.colour.colour,
-					alpha: node.cleanOptions.colour.alpha,
-					width: node.cleanOptions.width,
-				});
-				graphics.setFillStyle({});
+				const cellDiameter = state.getMetadata("cellDiameter");
+				if (!cellDiameter) throw new Error("Failed to get cell diameter");
 
-				for (let x = 0; x < 2000; x += 36) {
-					graphics.moveTo(x, 0).lineTo(x, 2000).stroke();
-				}
+				const bounds = state.getMetadata("bounds");
+				if (!bounds) throw new Error("Failed to get bounds");
 
-				for (let y = 0; y < 2000; y += 36) {
-					graphics.moveTo(0, y).lineTo(2000, y).stroke();
-				}
+				const color =
+					node.variant === "clean"
+						? node.cleanOptions.colour
+						: node.variant === "dots"
+							? node.dotsOptions.colour
+							: node.roughOptions.colour;
+				const radiusOrwidth =
+					node.variant === "dots"
+						? node.dotsOptions.radius
+						: node.variant === "clean"
+							? node.cleanOptions.width
+							: node.roughOptions.width;
+
+				drawGrid(
+					graphics,
+					node.variant === "clean" ? "lines" : node.variant,
+					bounds,
+					cellDiameter,
+					color,
+					radiusOrwidth,
+					node.roughOptions.roughness,
+				);
 
 				break;
 			}
@@ -338,17 +350,3 @@ export const parseMapFile = (file: Uint8Array<ArrayBuffer>) => {
 	};
 };
 
-const isHorizontalLine = (point1: Point, point2: Point): boolean => {
-	const slope = (point2[1] - point1[1]) / (point1[0] - point2[0]);
-	return slope === 0;
-};
-
-const getHorizontalAligment = (x1: number, x2: number): number => {
-	const sign = Math.sign(x1 - x2);
-	return sign === -1 ? 0 : 1;
-};
-
-const getVerticalAligment = (y1: number, y2: number): number => {
-	const sign = Math.sign(y1 - y2);
-	return sign === -1 ? 1 : 0;
-};

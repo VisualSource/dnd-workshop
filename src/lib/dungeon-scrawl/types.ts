@@ -2,7 +2,7 @@ import type { UUID } from "node:crypto";
 
 export type Point = [number, number];
 type ShapePart = Point[];
-type Shape = ShapePart[];
+export type Shape = ShapePart[];
 
 export type DSFile = {
 	version: number;
@@ -40,7 +40,7 @@ export type DSFile = {
 	errors: unknown[];
 };
 
-type Color = {
+export type Color = {
 	colour: number;
 	alpha: number;
 };
@@ -170,7 +170,7 @@ type DSNodeGrid = {
 	parentId: UUID;
 	visible: boolean;
 	gridType: "square";
-	variant: "clean" | "rought" | "dots";
+	variant: "clean" | "rough" | "dots";
 	cleanOptions: {
 		width: number;
 		colour: Color;
