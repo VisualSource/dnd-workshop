@@ -1,5 +1,5 @@
 mod http;
-
+mod commands;
 
 #[cfg_attr(mobile, tauri::mobile_entry_point)]
 pub fn run() {
@@ -14,7 +14,13 @@ pub fn run() {
         .plugin(tauri_plugin_fs::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_opener::init())
-        .invoke_handler(tauri::generate_handler![])
+
+        .manage(tokio::sync::Mutex::new(http::SteamWebLoginState::new()))
+        
+        .invoke_handler(tauri::generate_handler![
+            commands::start_steam_login,
+            commands::cancel_steam_login
+            ])
         .run(tauri::generate_context!())
         .expect("error while running tauri application");
 }

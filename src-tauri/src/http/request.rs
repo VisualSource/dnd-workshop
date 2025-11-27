@@ -1,4 +1,6 @@
-use std::{collections::HashMap, io::Read, net::TcpStream};
+use std::{collections::HashMap};
+use tokio::net::TcpStream;
+use tokio::io::AsyncReadExt;
 
 const MESSAGE_SIZE: usize = 1024;
 
@@ -12,11 +14,11 @@ pub struct Request {
 }
 
 impl Request {
-    pub fn new(mut stream: &TcpStream) -> Result<Self, String> {
+    pub async fn new(stream: &mut TcpStream) ->  std::io::Result<Self> {
         let mut received: Vec<u8> = Vec::new();
         let mut rx_bytes = [0u8; MESSAGE_SIZE];
         loop {
-            let bytes_read = stream.read(&mut rx_bytes);
+            let bytes_read = stream.read(&mut rx_bytes).await;
             match bytes_read {
                 Ok(bytes) => {
                     received.extend_from_slice(&rx_bytes[..bytes]);
@@ -24,7 +26,7 @@ impl Request {
                         break;
                     }
                 }
-                Err(err) => return Err(err.to_string()),
+                Err(err) => return Err(std::io::Error::other(err)),
             }
         }
 

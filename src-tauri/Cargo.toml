@@ -22,9 +22,10 @@ tauri-build = { version = "2", features = [] }
 
 [dependencies]
 # webkit
-mio = { version = "1", features = ["os-poll", "net"] }
-tauri = { version = "2", features = [] }
 
+tauri = { version = "2", features = [] }
+tokio-util = "0.7.17"
+tokio = { version = "1.48.0", features = ["net", "macros"] }
 # servo 
 #tauri = { version = "2", default-features = true, features = ["common-controls-v6"] }
 #tauri-runtime-verso = { git = "https://github.com/versotile-org/tauri-runtime-verso.git" }

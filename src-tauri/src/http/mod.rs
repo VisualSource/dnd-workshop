@@ -1,10 +1,7 @@
-use std::{
-    io::{self, ErrorKind, Write},
-    net::{TcpListener, TcpStream},
-    thread::{self, JoinHandle},
-};
-use min::{Events,Interset,Poll,Token};
-use mio::{Events, net::{TcpListener,TcpStream}};
+use tauri::{AppHandle, Emitter};
+use tokio_util::sync::CancellationToken;
+use tokio::io::AsyncWriteExt;
+use std::{collections::HashMap, io};
 
 mod request;
 mod response;
@@ -12,86 +9,114 @@ mod response;
 use request::Request;
 use response::Response;
 
-pub struct StreamWebLoginState {
-    port: Option<u16>,
-    handle: Option<JoinHandle<()>>,
+pub struct ActiveState {
+    cancellation_token: CancellationToken,
+    handle: tokio::task::JoinHandle<()>,
 }
 
-/**
- *  1. Start Sever
- *  2. generate noce
- *  3. return noce and port
- *  4. wait for request
- *  5. if invalid
- *         -> ignore
- *     else
- *  6. send response to window
- *  7. close server 
- * 
- */
-const SERVER: Token = Token(0);
-const MESSAGE_PUMP: Token = Token(1);
+pub struct SteamWebLoginState(Option<ActiveState>);
 
 impl SteamWebLoginState {
-    pub fn cancel(&mut self) -> io::Result<()> {
-        self.port = None;
+    pub fn new() -> Self {
+        Self(None)
+    }
 
-        if let Some(handle) = self.handle.take() {
-            handle.join().expect("Failed to join thread!");
+    pub async fn cancel(&mut self) -> io::Result<()> {
+        if let Some(state) = self.0.take() {
+            state.cancellation_token.cancel();
+            state.handle.await?;
         }
 
         Ok(())
     }
 
-    pub fn start_server(&mut self) -> io::Result<()> {
-        let handle = thread::spawn(||{
-            let mut poll = Poll::new()?;
-            let mut events = Events::with_capacity(128); 
+    pub async fn start_server(&mut self, app_handle: &AppHandle) -> io::Result<u16> {
+        if let Some(state) = self.0.take() {
+            state.cancellation_token.cancel();
+            state.handle.await?;
+        }
 
-            let mut server = TcpListener::bind("localhost")?;
-            
-            poll.registry().register(&mut server,SERVER,Interset::READABLE)?;
+        let token = CancellationToken::new();
+        let cloned_token = token.clone();
 
+        let listener = tokio::net::TcpListener::bind("localhost:0").await?;
+       
+        let addr = listener.local_addr()?;
+
+        let handle = app_handle.clone();
+        let handle = tokio::spawn(async move {
             loop {
-                poll.poll(&mut events, None)?;
-
-                for event in events.iter() {
-                    SERVER => {}
-                    MESSAGE_PUMP => {}
-                    _ => unreachable!()
+                tokio::select! {
+                _ = cloned_token.cancelled() => {
+                    break;
                 }
+                stream = listener.accept() => {
+                    match stream {
+                        Ok((stream,_)) => {
+                            match handle_connection(stream).await {
+                                Ok(result) => {
+                                    if let Some(value) = result {
+                                        cloned_token.cancel();
+                                        if let Err(err) = handle.emit("steam-login", value) {
+                                            eprintln!("{}",err);
+                                        }
+                                    }
+                                }
+                                Err(err)=>{
+                                    eprintln!("{}",err);
+                                }
+                            }
+                        }
+                        Err(err) => {
+                            eprintln!("{}",err);
+                        }
+                    }
+                }
+            }
             }
         });
 
+        let port = addr.port();
+
+        self.0 = Some(ActiveState { cancellation_token: token, handle });
 
 
-        self.handle = Some(handle);
-
-        Ok(())
+        Ok(port)
     }
 }
 
-fn handle_connection(mut stream: TcpStream) -> io::Result<()> {
-    let req = Request::new(&stream);
+async fn handle_connection(mut stream: tokio::net::TcpStream) -> io::Result<Option<HashMap<String,String>>> {
+    let req = Request::new(&mut stream).await;
+
+    let mut result = None;
 
     let res = match req {
         Ok(r) => {
             let res = match r.method.as_str() {
-                "GET" => Response::text(204, "", None),
+                "GET" => {
+                    println!("{:#?}",r);
+                    if &r.path == "/" {
+                        result = Some(r.query);
+                        Response::text(204, "", None)
+                    } else {
+                        Response::text(400, "", None)
+                    }
+                },
                 &_ => Response::text(400, "", None),
             };
 
             Response::resolve(&res)
         }
         Err(err) => {
-            let res = Response::text(500, err.to_string(), None);
+            eprintln!("{}",err);
+            let res = Response::text(500, "Error".into(), None);
             Response::resolve(&res)
         }
     };
 
-    if let Err(err) = stream.write(res.as_bytes()) {
+    if let Err(err) = stream.write(res.as_bytes()).await {
         return Err(io::Error::other(err));
     }
 
-    Ok(())
+    Ok(result)
 }

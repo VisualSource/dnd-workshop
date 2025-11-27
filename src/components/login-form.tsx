@@ -15,9 +15,7 @@ import { useActionState } from "react";
 import { Spinner } from "./ui/spinner";
 import { useNavigate } from "@tanstack/react-router";
 import { Nakama } from "@/lib/nakama";
-import { Webview } from "@tauri-apps/api/webview";
-import { Window } from "@tauri-apps/api/window";
-import { WebviewWindow } from "@tauri-apps/api/webviewWindow";
+import { startSteamLogin } from "@/lib/commands";
 
 type FormState = {
 	username?: string;
@@ -89,50 +87,13 @@ export function LoginForm({
 					</Field>
 					{errors?.form ? <FieldError>{errors.form}</FieldError> : null}
 				</FieldGroup>
+			
 			</form>
-			<FieldDescription className="px-6 text-center">
-				By clicking continue, you agree to our <span>Terms of Service</span> and{" "}
-				<span>Privacy Policy</span>.
-			</FieldDescription>
-		</div>
-	);
-}
-
-/*
-Stream support
-<FieldSeparator>Or</FieldSeparator>
+				<FieldSeparator>Or</FieldSeparator>
 					<Field className="grid gap-4">
 						<Button
 							onClick={() => {
-								console.log("Hello");
-
-								// https://github.com/vikas5914/steam-auth/blob/master/src/SteamAuth.php
-
-								const query = new URLSearchParams({
-									"openid.ns": "",
-									"openid.mode": "checkid_setup",
-									"openid.return_to": "http://localhost:3000",
-									"openid.realm": "http://localhost:3000",
-									"openid.identity":
-										"http://specs.openid.net/auth/2.0/identifier_select",
-									"openid.claimed_id":
-										"http://specs.openid.net/auth/2.0/identifier_select",
-								});
-
-								const webview = new WebviewWindow("steam-login", {
-									url: `https://steamcommunity.com/openid/login?${query.toString()}`,
-									width: 400,
-									height: 600,
-									title: "Steam Login",
-								});
-								webview.once("tauri://created", (e) => {
-									console.log(e);
-									// webview window successfully created
-								});
-								webview.once("tauri://error", (e) => {
-									console.log(e);
-									// an error happened creating the webview window
-								});
+								startSteamLogin()
 							}}
 							variant="outline"
 							type="button"
@@ -147,5 +108,13 @@ Stream support
 							Continue with Steam
 						</Button>
 					</Field>
+			<FieldDescription className="px-6 text-center">
+				By clicking continue, you agree to our <span>Terms of Service</span> and{" "}
+				<span>Privacy Policy</span>.
+			</FieldDescription>
+		</div>
+	);
+}
 
-*/
+
+	// https://github.com/vikas5914/steam-auth/blob/master/src/SteamAuth.php
