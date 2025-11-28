@@ -26,6 +26,7 @@
 			}
 		],
 		"security": {
+			"capabilities": ["default","steam-login-capability"],
 			"csp": null
 		}
 	},

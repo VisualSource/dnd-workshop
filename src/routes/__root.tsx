@@ -18,6 +18,7 @@ const RootLayout = () => (
 export const Route = createRootRouteWithContext<RouterContext>()({
 	component: RootLayout,
 	onEnter() {
+		if (import.meta.env.DEV) return;
 		check()
 			.then((update) => {
 				if (!update) return;

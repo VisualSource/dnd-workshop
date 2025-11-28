@@ -1,14 +1,18 @@
 {
-  "identifier": "desktop-capability",
+  "$schema": "../gen/schemas/desktop-schema.json",
+  "identifier": "steam-login-capability",
   "platforms": [
     "macOS",
     "windows",
     "linux"
   ],
+  "remote": {
+    "urls": ["https://steamcommunity.com/openid/login","https://visualsource.github.io/dnd-workshop-steam-login"]
+  },
   "windows": [
-    "main"
+    "steam-login"
   ],
   "permissions": [
-    "updater:default"
+    
   ]
 }
