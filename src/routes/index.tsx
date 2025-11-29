@@ -16,7 +16,7 @@ export const Route = createFileRoute("/")({
 		if (context.nakama.isAuthenticated()) {
 			return;
 		}
-
+		
 		const didRestore = await context.nakama.restore();
 		if (!didRestore) {
 			throw redirect({

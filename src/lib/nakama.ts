@@ -113,6 +113,8 @@ export class Nakama extends EventTarget {
 							refreshToken: this._session.refresh_token,
 						}),
 					);
+
+					return true;
 				} catch (error) {
 					localStorage.removeItem("auth");
 					console.error(error);

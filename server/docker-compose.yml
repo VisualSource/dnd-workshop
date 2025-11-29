@@ -16,7 +16,6 @@ services:
 
   nakama:
     #image: registry.heroiclabs.com/heroiclabs/nakama:3.33.1
-
     build: .
     depends_on:
       - postgres

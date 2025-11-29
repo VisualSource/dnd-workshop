@@ -104,7 +104,17 @@ export function LoginForm({
 
 								const nakama = Nakama.get();
 
-								await nakama.loginSteamWeb(result);
+								const values = Object.entries(result).reduce(
+									(prev, curr) => {
+										prev[curr[0]] = decodeURIComponent(curr[1]);
+										return prev;
+									},
+									{} as Record<string, string>,
+								);
+
+								await nakama.loginSteamWeb(values);
+								await navigate({ to: "/" });
+
 							} catch (error) {
 								console.error(error);
 							}
