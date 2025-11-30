@@ -6,6 +6,7 @@ import "./index.css";
 import { routeTree } from "./routeTree.gen";
 import { Nakama } from "./lib/nakama";
 import { Toaster } from "./components/ui/sonner";
+import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
 
 // Create a new router instance
 const router = createRouter({
@@ -22,6 +23,7 @@ declare module "@tanstack/react-router" {
 	}
 }
 
+const queryClient = new QueryClient();
 const nakama = Nakama.get();
 
 // Render the app
@@ -30,7 +32,9 @@ if (!rootElement.innerHTML) {
 	const root = ReactDOM.createRoot(rootElement);
 	root.render(
 		<StrictMode>
-			<RouterProvider router={router} context={{ nakama }} />
+			<QueryClientProvider client={queryClient}>
+				<RouterProvider router={router} context={{ nakama }} />
+			</QueryClientProvider>
 			<Toaster />
 		</StrictMode>,
 	);
