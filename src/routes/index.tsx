@@ -14,7 +14,6 @@ import type { NakamaMessage } from "@/lib/nakama-events";
 
 import Markdown from "react-markdown";
 
-
 import {
 	createFileRoute,
 	Link,
@@ -22,7 +21,26 @@ import {
 	useNavigate,
 } from "@tanstack/react-router";
 import { useEffect, useState, useTransition } from "react";
-
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuGroup,
+	DropdownMenuItem,
+	DropdownMenuLabel,
+	DropdownMenuSeparator,
+	DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+	BadgeCheck,
+	Bell,
+	ChevronsUpDown,
+	CreditCard,
+	LogOut,
+	Send,
+	Settings,
+	Settings2,
+	Sparkles,
+} from "lucide-react";
 
 export const Route = createFileRoute("/")({
 	component: RouteComponent,
@@ -31,7 +49,7 @@ export const Route = createFileRoute("/")({
 		if (context.nakama.isAuthenticated()) {
 			return;
 		}
-		
+
 		const didRestore = await context.nakama.restore();
 		if (!didRestore) {
 			throw redirect({
@@ -58,6 +76,104 @@ function RouteComponent() {
 	const navigate = useNavigate();
 	const [isPending, transition] = useTransition();
 
+	return (
+		<div className="flex flex-col h-full p-4">
+			<header className="flex justify-end"></header>
+			<main className="h-full grow flex flex-col w-full gap-2 justify-center items-center">
+				<div className="aspect-square min-w-12 min-h-12 flex items-center justify-center">
+					<img
+						src="/images/Square310x310Logo.png"
+						alt="application logo"
+						className="h-full w-full"
+					/>
+				</div>
+
+				<div className="flex flex-col gap-2 max-w-52 w-48">
+					<Button asChild className="w-full">
+						<Link to="/join-session">Join Session</Link>
+					</Button>
+					<Button
+						variant="secondary"
+						disabled={isPending}
+						onClick={() => {
+							transition(async () => {
+								const nakama = Nakama.get();
+								const match = await nakama.socket.createMatch(
+									crypto.randomUUID(),
+								);
+								nakama.match = match;
+								await navigate({
+									to: "/dm-session/$match-id",
+									params: {
+										"match-id": match.match_id,
+									},
+								});
+							});
+						}}
+					>
+						Start Session
+					</Button>
+
+					<Button variant="secondary" asChild>
+						<Link to="/editor-session">Editor</Link>
+					</Button>
+				</div>
+			</main>
+
+			<footer className="flex gap-2 items-center">
+				<DropdownMenu>
+					<DropdownMenuTrigger asChild>
+						<button
+							type="button"
+							className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground flex gap-2 items-center shadow bg-secondary rounded p-2 max-w-52 hover:bg-accent/55 cursor-pointer"
+						>
+							<CurrentProfile />
+							<ChevronsUpDown className="ml-auto size-4" />
+						</button>
+					</DropdownMenuTrigger>
+					<DropdownMenuContent
+						className="w-(--radix-dropdown-menu-trigger-width) max-w-52 rounded-lg"
+						align="start"
+					>
+						<DropdownMenuLabel className="p-0 font-normal">
+							<div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
+								<CurrentProfile />
+							</div>
+						</DropdownMenuLabel>
+						<DropdownMenuSeparator />
+
+						<DropdownMenuGroup>
+							<DropdownMenuItem className="cursor-pointer">
+								<Send />
+								Feadback
+							</DropdownMenuItem>
+							<DropdownMenuItem className="cursor-pointer">
+								<Settings />
+								Settings
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+						<DropdownMenuSeparator />
+						<DropdownMenuGroup>
+							<DropdownMenuItem className="cursor-pointer">
+								<LogOut />
+								Logout
+							</DropdownMenuItem>
+						</DropdownMenuGroup>
+					</DropdownMenuContent>
+				</DropdownMenu>
+
+				<div className="ml-auto">
+					<Button size="icon-sm">
+						<Bell />
+					</Button>
+				</div>
+			</footer>
+		</div>
+	);
+}
+
+
+/*
 	const [messages, setMessages] = useState<
 		{ msgId: string; msg: string; username: string }[]
 	>([]);
@@ -108,34 +224,8 @@ function RouteComponent() {
 		};
 	}, []);
 
-	return (
-		<div>
-			<Button
-				disabled={isPending}
-				onClick={() => {
-					transition(async () => {
-						const nakama = Nakama.get();
-						const match = await nakama.socket.createMatch(crypto.randomUUID());
-						nakama.match = match;
-						await navigate({
-							to: "/dm-session/$match-id",
-							params: {
-								"match-id": match.match_id,
-							},
-						});
-					});
-				}}
-			>
-				Start Session
-			</Button>
-			<Button asChild>
-				<Link to="/join-session">Join Session</Link>
-			</Button>
-			<Button asChild>
-				<Link to="/editor-session">Editor</Link>
-			</Button>
 
-			<Drawer>
+		<Drawer>
 				<DrawerTrigger asChild>
 					<Button>Messages</Button>
 				</DrawerTrigger>
@@ -177,9 +267,4 @@ function RouteComponent() {
 				</DrawerContent>
 			</Drawer>
 
-			<div className="flex gap-2">
-				<CurrentProfile />
-			</div>
-		</div>
-	);
-}
+*/

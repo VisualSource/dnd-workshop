@@ -7,6 +7,7 @@ import { routeTree } from "./routeTree.gen";
 import { Nakama } from "./lib/nakama";
 import { Toaster } from "./components/ui/sonner";
 import { QueryClientProvider, QueryClient } from "@tanstack/react-query";
+import { ToastContainer } from "react-toastify";
 
 // Create a new router instance
 const router = createRouter({
@@ -35,7 +36,7 @@ if (!rootElement.innerHTML) {
 			<QueryClientProvider client={queryClient}>
 				<RouterProvider router={router} context={{ nakama }} />
 			</QueryClientProvider>
-			<Toaster />
+			<ToastContainer theme="dark" stacked />
 		</StrictMode>,
 	);
 }

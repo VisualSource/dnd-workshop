@@ -179,6 +179,44 @@
   --shadow-2xl: 0px 4px 8px -1px hsl(0 0% 0% / 0.25);
 }
 
+.Toastify__toast {
+	@apply border shadow-lg bg-background;
+}
+
+.Toastify__toast-theme--dark.Toastify__toast--default {
+	@apply bg-background text-foreground;
+}
+.Toastify__toast-theme--dark.Toastify__toast--info {
+	@apply border-sky-600;
+}
+.Toastify__toast-theme--dark.Toastify__toast--success {
+	@apply border-green-600;
+}
+.Toastify__toast-theme--dark.Toastify__toast--warning {
+	@apply border-yellow-500;
+}
+.Toastify__toast-theme--dark.Toastify__toast--error {
+	@apply border-destructive;
+}
+
+.Toastify__progress-bar-theme--dark {
+	@apply bg-primary;
+}
+.Toastify__progress-bar--info {
+	@apply bg-sky-600;
+}
+.Toastify__progress-bar--success {
+	@apply bg-green-600;
+}
+.Toastify__progress-bar--warning {
+	@apply bg-yellow-500;
+}
+.Toastify__progress-bar--error {
+	@apply bg-destructive;
+}
+
+
+
 .dm-sidebar-content {
   @apply grid grid-cols-1;
   grid-template-rows: calc(var(--spacing) * 14) calc(100cqh - calc(var(--spacing) * 14));

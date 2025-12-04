@@ -4,3 +4,7 @@ logger:
 session:
   token_expiry_sec: 7200
 data_dir: ./data
+
+runtime:
+  env: 
+    - "STEAM_WEB_API_KEY=3911E2BBD0AF37CC48CA9D52E46D7A67"
